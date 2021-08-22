@@ -1,1 +1,70 @@
+UNITA'_DA_DIPORTO (virtual)
 
+	-Nome (string)
+	-Cantiere (string)
+	-Modello (string)
+	-Materiale (string)
+	-Anno_costruzione (unsigned int)
+	-Velocità_media (unsigned int)
+	-Peso (unsigned int)
+	-Lunghezza (unsigned short int)
+	-Propulsione (enum {motore, vento, acqua, uomo})
+	-Patente (bool)
+	-Portata (unsigned short int)
+
+	+Imbarcazione()
+	+virtual ~Imbarcazione()
+	+get()[11]
+	+set()[11]
+	+virtual string getType() const
+	+virtual void print() const
+
+NAVE (virtual)
+	-Tipologia (enum) [classica, brotan, mallet, garrat] {5}
+	-Efficenza[km/kg] (double)
+	-Tipo di carburante (enum) [coal, wood, oil] {5}
+
+	+get()[3]
+	+set()[3]
+	+CarburanteNecessario(int km)
+	+KmPercorribili(int carburante)
+
+IMBARCAZIONE (virtual)
+
+	-Efficenza[km/l] (double)
+	-Capienza serbatoio (int)
+	-Tipo di trasmissione (enum) [fuel-electric, fuel-mechanical, fuel-hydraulic, fuel-steam, fuel-pneumatic] {4}
+	-Tipo di carburante (enum) [kerosene, petrol, diesel]
+	+get()[4]
+	+set()[4]
+	+CarburanteNecessario(int km)
+	+KmPercorribili(int carburante)
+
+NATANTE (virtual)
+	
+	-Colore (enum {giallo, verde, rosso, bianco, blu, arancione})
+
+	+get()[2]
+	+set()[2]
+	+CarburanteNecessario(int km)
+	+KmPercorribili(int kilowatt)
+
+BARCA_VELA
+
+	-Tecnologia (enum) [eds, ems, inductrack] {2}
+	+get()[1]
+	+set()[1]
+
+BARCA_MOTORE
+
+	-motore primario (enum) [elettrico, diesel, fullhybrid] {1}
+	+get()[1]
+	+set()[1]
+	+CarburanteNecessario(int km)
+	+KmPercorribili(int carburante1, int carburante2)
+  
+YACHT
+
+  -num_camere
+  -ext_designer
+  -int_designer
