@@ -1,3 +1,4 @@
+#CLASSE BASE ASTRATTA#
 UNITA'_DA_DIPORTO (virtual)
 
 	-Nome (string)
@@ -19,52 +20,63 @@ UNITA'_DA_DIPORTO (virtual)
 	+virtual string getType() const
 	+virtual void print() const
 
+#CLASSE DERIVATA ASTRATTA#
 NAVE (virtual)
-	-Tipologia (enum) [classica, brotan, mallet, garrat] {5}
-	-Efficenza[km/kg] (double)
-	-Tipo di carburante (enum) [coal, wood, oil] {5}
 
-	+get()[3]
-	+set()[3]
-	+CarburanteNecessario(int km)
-	+KmPercorribili(int carburante)
+	-Equipaggio (unsigned int)
+	-Num_piani (unsigned short int)
+	-Consumo (double)
+	-Tipo_carburante (enum) [diesel, fuel] {5}
 
-IMBARCAZIONE (virtual)
-
-	-Efficenza[km/l] (double)
-	-Capienza serbatoio (int)
-	-Tipo di trasmissione (enum) [fuel-electric, fuel-mechanical, fuel-hydraulic, fuel-steam, fuel-pneumatic] {4}
-	-Tipo di carburante (enum) [kerosene, petrol, diesel]
 	+get()[4]
 	+set()[4]
-	+CarburanteNecessario(int km)
-	+KmPercorribili(int carburante)
+	+CarburanteNecessario
+	+KmPercorribili
 
+
+#CLASSE DERIVATA ASTRATTA#
+IMBARCAZIONE (virtual)
+
+	-Capienza serbatoio (int)
+	
+	+get()[1]
+	+set()[1]
+	+CarburanteNecessario
+	+KmPercorribili
+
+
+#CLASSE DERIVATA ASTRATTA#
 NATANTE (virtual)
 	
 	-Colore (enum {giallo, verde, rosso, bianco, blu, arancione})
 
 	+get()[2]
 	+set()[2]
-	+CarburanteNecessario(int km)
-	+KmPercorribili(int kilowatt)
+	+CarburanteNecessario
+	+KmPercorribili
 
+
+#CLASSI DERIVATE DA IMBARCAZIONE#
 BARCA_VELA
 
-	-Tecnologia (enum) [eds, ems, inductrack] {2}
-	+get()[1]
-	+set()[1]
+	-Num_vele (unsigned short int)
+	-Motore_ausiliario (bool)
+	+get()[2]
+	+set()[2]
 
 BARCA_MOTORE
 
-	-motore primario (enum) [elettrico, diesel, fullhybrid] {1}
+	-Tipo_motore [elettrico, diesel] {1}
+	-Num_motori (unsigned short int)
+	-Potenza_tot (unsigned int)
 	+get()[1]
 	+set()[1]
-	+CarburanteNecessario(int km)
-	+KmPercorribili(int carburante1, int carburante2)
+	+CarburanteNecessario
+	+KmPercorribili
   
+#CLASSE DERIVATA DA NAVE#
 YACHT
 
-  -num_camere
-  -ext_designer
-  -int_designer
+  	-num_camere
+  	-ext_designer
+  	-int_designer
