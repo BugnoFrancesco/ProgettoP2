@@ -25,6 +25,7 @@ public:
     virtual bool patenteNautica() const final override;
     virtual float calcoloConsumi(float) const override;
     virtual float calcoloAutonomia(unsigned int) const override;
-
+    virtual Vela* clone() const override;
+    
 };
 #endif // VELA_H
