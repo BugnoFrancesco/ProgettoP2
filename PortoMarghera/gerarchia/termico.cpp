@@ -50,3 +50,7 @@ float Termico::calcoloAutonomia(unsigned int carburante_imbarcato) const{
     if(carburante_imbarcato<capienzaSerbatoi) return (carburante_imbarcato/consumo);
     else return 0;//throw new BoatException("La capienza dei serbatoi non permette l'inserimento del carburante selezionato");
 }
+
+Termico* Termico::clone() const {
+    return new Termico(*this);
+}
