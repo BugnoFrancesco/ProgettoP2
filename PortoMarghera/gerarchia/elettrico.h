@@ -27,7 +27,7 @@ public:
     virtual std::string tipoPropulsione() const override;
     virtual float calcoloConsumi(float) const override;
     virtual float calcoloAutonomia(unsigned int) const override;
-
+    virtual Elettrico* clone() const override;
 };
 
 #endif // ELETTRICO_H
