@@ -38,6 +38,7 @@ public:
     virtual bool patenteNautica() const=0;
     virtual float calcoloConsumi(float) const=0;
     virtual float calcoloAutonomia(unsigned int) const=0;
+    virtual Imbarcazione* clone() const = 0;
 
 };
 
