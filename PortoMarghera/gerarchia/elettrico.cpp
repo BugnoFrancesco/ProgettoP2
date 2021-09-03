@@ -49,3 +49,7 @@ float Elettrico::calcoloAutonomia(unsigned int carica_batterie) const{
     if(carica_batterie<capienzaBatteria) return (carica_batterie/consumo);
     else return 0; //throw new BoatException("La batteria non permette l'inserimento della carica selezionata");
 }
+
+Elettrico* Elettrico::clone() const {
+    return new Elettrico(*this);
+}
