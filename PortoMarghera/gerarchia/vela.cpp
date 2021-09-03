@@ -54,3 +54,6 @@ float Vela::calcoloAutonomia(unsigned int carburante_imbarcato) const{
     //throw new BoatException("La capienza dei serbatoi non permette l'inserimento del carburante selezionato");
 }
 
+Vela* Vela::clone() const {
+    return new Vela(*this);
+}
