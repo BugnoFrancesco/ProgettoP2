@@ -27,7 +27,7 @@ public:
     virtual std::string tipoPropulsione() const override;
     virtual float calcoloConsumi(float) const override;
     virtual float calcoloAutonomia(unsigned int) const override;
-
+    virtual Termico* clone() const override;
 };
 
 #endif // TERMICO_H
