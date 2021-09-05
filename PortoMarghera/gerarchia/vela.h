@@ -18,10 +18,11 @@ public:
     void setMotoreAusiliario(bool=false);
     void setPotenzaMotoreAusiliario(unsigned int=0);
     void setNumVele(unsigned int=1);
+    
+    virtual void print() const;
+    virtual std::string boat_toString() const;
 
     virtual std::string tipoPropulsione() const final override;
-    virtual void print() const;
-
     virtual bool patenteNautica() const final override;
     virtual float calcoloConsumi(float) const override;
     virtual float calcoloAutonomia(unsigned int) const override;
