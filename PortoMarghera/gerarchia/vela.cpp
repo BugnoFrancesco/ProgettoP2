@@ -41,6 +41,22 @@ void Vela::print() const{
     cout<<"\nMotore Ausiliario: "<<getMotoreAusiliario()<<"\nPotenza motore: "<<getPotenzaMotoreAusiliario()<<"\nNumero di vele: "<<getNumVele();
 }
 
+std::string Vela::boat_toString() const{
+    std::string s=Imbarcazione::boat_toString();
+    std::string m_aus="";
+    std::string n_vele=std::to_string(getNumVele());
+    if(getMotoreAusiliario()==true){
+        m_aus="si";
+        std::string p_motA = std::to_string(getPotenzaMotoreAusiliario());
+        s.append("\nNumero vele: "+n_vele+"\Motore ausiliario: "+m_aus+"\nPotenza motore ausiliario: "+p_motA);
+    }
+    else {
+        m_aus="no";
+        s.append("\nNumero vele: "+n_vele+"\Motore ausiliario: "+m_aus);
+    }
+    return s;
+}
+
 std::string Vela::tipoPropulsione() const {
     return "Vela";
 }
