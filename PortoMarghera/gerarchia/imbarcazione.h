@@ -33,6 +33,7 @@ public:
     float calcoloMiglia(float) const;
 
     virtual void print() const;
+    virtual std::string boat_toString() const;
 
     virtual std::string tipoPropulsione() const=0;
     virtual bool patenteNautica() const=0;
