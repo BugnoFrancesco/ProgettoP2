@@ -36,6 +36,17 @@ void Elettrico::print() const{
     cout<<"\nTipo di batteria: "<<getTipoBatteria()<<"\nConsumo: "<<getConsumo()<<" KW/h"<<"\nCapienza batteria: "<<getCapienzaBatteria()<<" KW";
 }
 
+std::string Elettrico::boat_toString() const{
+    std::string s=Motore::boat_toString();
+    std::string cons=std::to_string(getConsumo());
+    std::string c_batteria=std::to_string(getCapienzaBatteria());
+    std::string t_batteria="";
+    if(getTipoBatteria()==litio) t_batteria="litio";
+    else if(getTipoBatteria()==piombo) t_batteria="piombo";
+    s.append("\nConsumo: "+cons+" L/h"+"\nCapienza Serbatoi: "+c_batteria+"\nTipo combustione: "+t_batteria);
+    return s;
+}
+
 std::string Elettrico::tipoPropulsione() const {
     return "Motore Elettrico";
 }
