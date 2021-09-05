@@ -23,6 +23,7 @@ public:
 
     unsigned int calcoloPotenzaTot() const;
 
+    virtual std::string boat_toString() const;
     virtual void print() const;
     virtual bool patenteNautica() const;
 
