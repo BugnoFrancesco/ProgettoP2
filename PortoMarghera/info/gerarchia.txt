@@ -1,0 +1,82 @@
+
+IMBARCAZIONE (virtual)
+
+	-NomeModello (string)
+	-Cantiere (string)
+	-VelocitàNodi (unsigned int)
+	-Peso (unsigned int)
+	-Lunghezza (unsigned short int)
+	-Tipo (enum) {natante, barca, nave}
+	
+	+Imbarcazione()
+	+virtual ~Imbarcazione()
+	+get()[11]
+	+set()[11]
+	+virtual string getType() const
+	+virtual void print() const
+
+	+virtual double calcoloConsumi() const
+	+virtual double calcoloMiglia() const
+	+virtual double conversioneKm_h() const
+	+virtual bool patenteNautica() const
+
+MOTORE (virtual)
+
+	-Num_motori (unsigned int)
+	-Potenza_motore (unsigned int) (CV)
+	-Tipo_motore (enum) {entrobordo, fuoribordo, entrofuoribordo}
+
+	+Motore()
+	+virtual ~Motore()
+	+get()[11]
+	+set()[11]
+	+virtual string getType() const
+	+virtual void print() const
+
+	+virtual double calcoloConsumi() const
+	+virtual double calcoloMiglia() const
+	+virtual double conversioneKm_h() const
+	+virtual bool patenteNautica() const
+
+
+TERMICO
+
+	-Tipo (enum) {diesel, benzina}
+	-Consumi (double) (Euro/L)
+	-CapienzaSerbatoi (unsigned int)
+	
+	+Termico()
+	+~Termico()
+	+get()[11]
+	+set()[11]
+	+virtual string getType() const
+	+virtual void print() const
+
+	+virtual double calcoloConsumi() const
+	+virtual double calcoloMiglia() const
+	+virtual double conversioneKm_h() const
+	+virtual bool patenteNautica() const
+
+ELETTRICO
+
+	-Tipo_batteria (enum) {litio, piombo-gel}
+	-Consumi (double) (Euro/KWh)
+	-capienzaBatteria (unsigned int)
+	
+	+Elettrico()
+	+~Elettrico()
+	+get()[11]
+	+set()[11]
+	+virtual string getType() const
+	+virtual void print() const
+
+	+virtual double calcoloConsumi() const
+	+virtual double calcoloMiglia() const
+	+virtual double conversioneKm_h() const
+	+virtual bool patenteNautica() const
+
+VELA
+
+	-Motore_ausiliario (bool)
+	-Num_vele (unsigned short int)
+	
