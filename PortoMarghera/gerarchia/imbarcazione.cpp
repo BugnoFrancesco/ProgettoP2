@@ -75,6 +75,17 @@ void Imbarcazione::print() const{
 }
 
 /*
+ * @brief utilizzata per rappresentazre in forma di stringa un'imbarcazione
+ * @return stringa contentente le informazioni riguardanti l'imbarcazione
+*/
+std::string Imbarcazione::boat_toString() const{
+    string b=tipoImbarcazione();
+    transform(b.begin(), b.end(), b.begin(), [](unsigned char c){ return toupper(c); });
+    std::string s="\nTipo: "+b+"\nNome: "+getNome()+"\nCantiere: "+getCantiere()+"\nVelocita': "+std::to_string(getVelocita())+" nodi"+"\nLunghezza: "+std::to_string(getLunghezza())+" m"+"\nPeso: "+std::to_string(getPeso())+" kg";
+    return s;
+}
+
+/*
  * @brief restituisce il tempo di navigazione possibile in base alla velocità di crociera dell'imbarcazione
  * @param miglia nautiche
 */
