@@ -13,7 +13,7 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 
-
+/*
 #include "model.h"
 #include "menubar.h"
 #include "mainlayout.h"
@@ -67,5 +67,5 @@ public slots:
     void slotKmPercorribili();
     void slotCarburanteNecessario();
 };
-
+*/
 #endif // MAINWINDOW_H

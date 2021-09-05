@@ -25,21 +25,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        imbarcazione.cpp \
-        motore.cpp \
-        vela.cpp \
-        termico.cpp \
-        elettrico.cpp \
-        model.cpp \
-    mainwindow.cpp
+        Modello/Gerarchia/imbarcazione.cpp \
+        Modello/Gerarchia/motore.cpp \
+        Modello/Gerarchia/vela.cpp \
+        Modello/Gerarchia/termico.cpp \
+        Modello/Gerarchia/elettrico.cpp \
+        Modello/model.cpp
 
 HEADERS += \
-        imbarcazione.h \
-        motore.h \
-        vela.h \
-        termico.h \
-        elettrico.h \
-        deepptr.h \
-        container.h \
-        model.h \
-    mainwindow.h
+        Modello/Gerarchia/imbarcazione.h \
+        Modello/Gerarchia/motore.h \
+        Modello/Gerarchia/vela.h \
+        Modello/Gerarchia/termico.h \
+        Modello/Gerarchia/elettrico.h \
+        Modello/deepptr.h \
+        Modello/container.h \
+        Modello/model.h

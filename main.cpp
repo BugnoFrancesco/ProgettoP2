@@ -1,16 +1,17 @@
-#include "imbarcazione.h"
-#include "motore.h"
-#include "vela.h"
-#include "termico.h"
-#include "elettrico.h"
+#include "Modello/Gerarchia/imbarcazione.h"
+#include "Modello/Gerarchia/motore.h"
+#include "Modello/Gerarchia/vela.h"
+#include "Modello/Gerarchia/termico.h"
+#include "Modello/Gerarchia/elettrico.h"
+#include "Modello/model.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Vela w;
-    Termico t;
-    Elettrico e;
-
-    return a.exec();
+    Model s;
+    std::cout<<s.numImbarcazioni();
+    s.push_end(new Vela());
+    std::cout<<s.numImbarcazioni();
+    return 0;
 }
