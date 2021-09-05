@@ -306,7 +306,7 @@ void Container<T>::clear(){
 template <class T>
 void Container<T>::push_back(const T& t){
     if(size==capacity)  resize();
-        v[size]=*t;
+        v[size]=t;
         size++;
 }
 
@@ -322,8 +322,9 @@ void Container<T>::pop(unsigned int i){
 }
 
 template <class T>
-void Container<T>::switchItem(T* t, unsigned int i){
-    delete v[i];
+void Container<T>::switchItem(const T& t, unsigned int i){
+    //delete v[i];
+    distruggi(v);
     v[i]=*t;
 }
 
