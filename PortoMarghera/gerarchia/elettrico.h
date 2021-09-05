@@ -23,6 +23,7 @@ public:
     void setTipoBatteria(tipo_batteria=litio);
 
     virtual void print() const;
+    virtual std::string boat_toString() const;
 
     virtual std::string tipoPropulsione() const override;
     virtual float calcoloConsumi(float) const override;
