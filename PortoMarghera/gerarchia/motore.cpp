@@ -43,3 +43,15 @@ void Motore::print() const{
     Imbarcazione::print();
     cout<<"\nNumero di motori: "<<getNumMotori()<<"\nPotenza singolo motore: "<<getPotenzaMotore()<<" cv"<<"\nTipo di motore: "<<getTipoMotore();
 }
+
+std::string Motore::boat_toString() const{
+    std::string s=Imbarcazione::boat_toString();
+    std::string n_motori=std::to_string(getNumMotori());
+    std::string p_motore=std::to_string(getPotenzaMotore());
+    std::string t_motore="";
+    if(getTipoMotore()==fuoribordo) t_motore="fuoribordo";
+    else if(getTipoMotore()==entrobordo) t_motore="entrobordo";
+    else if(getTipoMotore()==entrofuoribordo) t_motore="entrofuoribordo";
+    s.append("\nNumero motori: "+n_motori+"\nPotenza singolo motore: "+p_motore+"\nTipo motore: "+t_motore);
+    return s;
+}
