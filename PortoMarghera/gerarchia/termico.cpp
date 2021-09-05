@@ -37,6 +37,17 @@ void Termico::print() const{
     cout<<"\nTipo di combustione: "<<getTipoCombustione()<<"\nConsumo: "<<getConsumo()<<" L/h"<<"\nCapienza serbatoi: "<<getCapienzaSerbatoi()<<" L";
 }
 
+std::string Termico::boat_toString() const{
+    std::string s=Motore::boat_toString();
+    std::string cons=std::to_string(getConsumo());
+    std::string c_serbatoi=std::to_string(getCapienzaSerbatoi());
+    std::string t_combust="";
+    if(getTipoCombustione()==diesel) t_combust="diesel";
+    else if(getTipoCombustione()==benzina) t_combust="benzina";
+    s.append("\nConsumo: "+cons+" L/h"+"\nCapienza Serbatoi: "+c_serbatoi+"\nTipo combustione: "+t_combust);
+    return s;
+}
+
 std::string Termico::tipoPropulsione() const {
     return "Motore Termico";
 }
