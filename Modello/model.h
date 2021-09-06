@@ -15,7 +15,6 @@ public:
     Model() = default;
     ~Model() = default;
     void push_end(Imbarcazione*); //aggiunge un'imbarcazione in coda
-    void sostituisci(Imbarcazione* x, unsigned int y); //sostituisce l'imbarcazione in posizione y con una nuova imbarcazione
     void erase(unsigned int =0); //elimina l'imbarcazione in una data posizione
     void clear(); //elimina tutte le imbarcazioni presenti
     bool isEmpty() const; //verifica se il contenitore è vuoto

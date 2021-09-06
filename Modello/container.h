@@ -81,7 +81,6 @@ public:
     void clear();
     void push_back(const T&);
     void pop(unsigned int =0);
-    void switchItem(const T&, unsigned int =0);
     void erase(T);
 
     Iterator begin();
@@ -322,13 +321,6 @@ void Container<T>::pop(unsigned int i){
             }
             v[size]=nullptr;
         }
-}
-
-template <class T>
-void Container<T>::switchItem(const T& t, unsigned int i){
-    //delete v[i]
-    distruggi(v);
-    v[i]=t;
 }
 
 template<class T>

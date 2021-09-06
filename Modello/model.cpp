@@ -52,15 +52,6 @@ void Model::push_end(Imbarcazione *b)
     if(b)   lista.push_back(DeepPtr<Imbarcazione>(b));
 }
 
-/**
- * @brief sostituisce l'imbarcazione in posizione y con una nuova
- * @param x = imbarcazione da sostituire al posto di quella presente nel contenitore
- * @param y = indice dell'imbarcazione da eliminare
- */
-void Model::sostituisci(Imbarcazione* x, unsigned int y){
-    if(x) lista.switchItem(DeepPtr<Imbarcazione>(x),y);
-
-}
 
 /**
  * @brief erase elimina l'imbarcazione in posizione i
