@@ -9,7 +9,7 @@ private:
     float consumo;
     unsigned int capienzaSerbatoi;
 public:
-    Termico(const std::string& m= "No Name", const std::string& c= "No Builder", unsigned int p=0, unsigned int v=0, unsigned int l=0, unsigned int numM=0, unsigned int potM=0,tipo_motore tM=fuoribordo,
+    Termico(const std::string& m= "No Name", const std::string& c= "No Builder", unsigned int p=0, unsigned int v=0, unsigned int l=0, unsigned int numM=0, unsigned int potM=0,std::string tM="fuoribordo",
             std::string tC="diesel", float con=0, unsigned int capS=0);
 
     float getConsumo() const;

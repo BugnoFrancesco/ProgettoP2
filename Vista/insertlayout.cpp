@@ -1,164 +1,241 @@
 #include "insertlayout.h"
 
 InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new QVBoxLayout(this)),
-    nomeL(new QLabel(this)), costruttoreL(new QLabel(this)), temperaturaSL(new QLabel(this)), efficenzaEL(new QLabel(this)), potenzaICL(new QLabel(this)), speedL(new QLabel(this)), pesoL(new QLabel(this)), carburanteSL(new QLabel(this)), motoreICL(new QLabel(this)),
-    nome(new QLineEdit(this)), costruttore(new QLineEdit(this)), temperaturaS(new QLineEdit(this)), efficenzaE(new QLineEdit(this)), potenzaIC(new QLineEdit(this)), speed(new QLineEdit(this)),
-    peso(new QLineEdit(this)), carburanteS(new QLineEdit(this)),motoreIC(new QLineEdit(this)),
-    tecnologia(new ComboBoxTech(this)),primario(new ComboBoxMotorePrimario(this)), trasmissione(new ComboBoxTrasmissione(this)), conferma(new QPushButton(this)), annulla(new QPushButton(this)), tipo(tipoT)
+    nomeL(new QLabel(this)), cantiereL(new QLabel(this)), speedL(new QLabel(this)), pesoL(new QLabel(this)), lunghezzaL(new QLabel(this)), numMotoriL(new QLabel(this)), potMotoreL(new QLabel(this)),
+    consTermicoL(new QLabel(this)), consElettricoL(new QLabel(this)), capSerbatoiL(new QLabel(this)), capBatteriaL(new QLabel(this)), numVeleL(new QLabel(this)), potMotAusiL(new QLabel(this)),
+    nome(new QLabel(this)), cantiere(new QLabel(this)), speed(new QLabel(this)), peso(new QLabel(this)), lunghezza(new QLabel(this)), numMotori(new QLabel(this)), potMotore(new QLabel(this)),
+    consTermico(new QLabel(this)), consElettrico(new QLabel(this)), capSerbatoi(new QLabel(this)), capBatteria(new QLabel(this)), numVele(new QLabel(this)), potMotAusi(new QLabel(this)),
+    tipoMotore(new QComboBox(this)), tipoCarburante(new QComboBox(this)), tipoBatteria(new QComboBox(this)), motoreAusi(new QComboBox(this)), conferma(new QPushButton(this)), annulla(new QPushButton(this)), tipo(tipoT)
 
 {
     conferma->setText("Conferma");
     annulla->setText("Cancella");
-    nomeL->setText("Nome");
+
+    nomeL->setText("Nome modello");
+    cantiereL->setText("Cantiere di costruzione");
     pesoL->setText("Peso");
-    speedL->setText("Velocità massima");
-    costruttoreL->setText("Costruttore");
-    temperaturaSL->setText("Temperatura operativa motore a vapore");
-    efficenzaEL->setText("Effcienza motore elettrico");
-    potenzaICL->setText("Potenza motore Diesel");
-    carburanteSL->setText("Carburante motore a vapore");
-    motoreICL->setText("Nome motore Diesel");
+    speedL->setText("Velocità di crociera");
+    lunghezzaL->setText("Lunghezza");
+    numMotoriL->setText("Numero di motori");
+    potMotoreL->setText("Potenza singolo motore");
+    consTermicoL->setText("Consumo motore termico");
+    consElettricoL->setText("Consumo motore elettrico");
+    capSerbatoiL->setText("Capienza serbatoi");
+    capBatteriaL->setText("Capienza batteria");
+    numVeleL->setText("Numero di vele");
+    potMotAusiL->setText("Potenza motore ausiliario");
 
-    nome->setPlaceholderText("Inserisci nome treno");
+    nome->setPlaceholderText("Inserisci nome del modello di imbarcazione");
     nome->setValidator(new QRegExpValidator(QRegExp("[A-Z0-9a-z ]{0,50}")));
-    costruttore->setPlaceholderText("Inserisci costruttore treno");
-    costruttore->setValidator(new QRegExpValidator(QRegExp("[A-Z0-9a-z]{0,50}")));
-    efficenzaE->setPlaceholderText("Inserisci efficenza motore elettrico");
-    efficenzaE->setValidator(new QRegExpValidator(QRegExp("[0-9.]{0,5}")));
-    temperaturaS->setPlaceholderText("Inserisci temperatura operativa del motore a vapore");
-    temperaturaS->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
-    potenzaIC->setPlaceholderText("Inserisci la potenza motore a combustione interna");
-    potenzaIC->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
-    speed->setPlaceholderText("Inserisci velocità massima");
+    cantiere->setPlaceholderText("Inserisci cantiere di costruzione");
+    cantiere->setValidator(new QRegExpValidator(QRegExp("[A-Z0-9a-z]{0,50}")));
+    speed->setPlaceholderText("Inserisci velocità di crociera (Nodi)");
     speed->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
-    peso->setPlaceholderText("Inserisci peso");
+    peso->setPlaceholderText("Inserisci peso (kg)");
     peso->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
-    carburanteS->setPlaceholderText("Inserisci carburante steam");
-    carburanteS->setValidator(new QRegExpValidator(QRegExp("[A-Z0-9a-z]{0,50}")));
-    motoreIC->setPlaceholderText("Inserisci nome e marca motore a combustione interna");
-    motoreIC->setValidator(new QRegExpValidator(QRegExp("[A-Z0-9a-z]{0,50}")));
+    lunghezza->setPlaceholderText("Inserisci lunghezza (m)");
+    lunghezza->setValidator(new QRegExpValidator(QRegExp("[0-9.]{0,5}")));
+    numMotori->setPlaceholderText("Inserisci il numero di motori");
+    numMotori->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    potMotore->setPlaceholderText("Inserisci la potenza del singolo motore (Cv)");
+    potMotore->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    consTermico->setPlaceholderText("Inserisci il consumo del motore termico (L/h)");
+    consTermico->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    consElettrico->setPlaceholderText("Inserisci il consumo del motore elettrico (Kw/h)");
+    consElettrico->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    capSerbatoi->setPlaceholderText("Inserisci la capienza dei serbatoi (L)");
+    capSerbatoi->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    capBatteria->setPlaceholderText("Inserisci la capienza delle batterie (Kw)");
+    capBatteria->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    numVele->setPlaceholderText("Inserisci il numero di vele");
+    numVele->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    potMotAusi->setPlaceholderText("Inserisci la potenza del motore ausiliario (Cv)");
+    potMotAusi->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
 
-    motoreIC->hide();
-    efficenzaE->hide();
-    trasmissione->hide();
-    primario->hide();
-    tecnologia->hide();
-    potenzaIC->hide();
-    temperaturaS->hide();
-    carburanteS->hide();
-    temperaturaSL->hide();
-    efficenzaEL->hide();
-    potenzaICL->hide();
-    motoreICL->hide();
-    carburanteSL->hide();
+    tipoMotore->addItem("Entrobordo");
+    tipoMotore->addItem("Fuoribordo");
+    tipoMotore->addItem("EntroFuoribordo");
+
+    tipoCarburante->addItem("Diesel");
+    tipoCarburante->addItem("Benzina");
+
+    tipoBatteria->addItem("Litio");
+    tipoBatteria->addItem("Piombo");
+
+    motoreAusi->addItem("Si");
+    motoreAusi->addItem("No");
+
+    numMotori->hide();
+    potMotore->hide();
+    consTermico->hide();
+    consElettrico->hide();
+    capSerbatoi->hide();
+    capBatteria->hide();
+    numVele->hide();
+    potMotAusi->hide();
+    numMotoriL->hide();
+    potMotoreL->hide();
+    consTermicoL->hide();
+    consElettricoL->hide();
+    capSerbatoiL->hide();
+    capBatteriaL->hide();
+    numVeleL->hide();
+    potMotAusiL->hide();
+
+    tipoMotore->hide();
+    tipoCarburante->hide();
+    tipoBatteria->hide();
+    motoreAusi->hide();
 
     layoutPopUp->addWidget(nomeL);
     layoutPopUp->addWidget(nome);
-    layoutPopUp->addWidget(costruttoreL);
-    layoutPopUp->addWidget(costruttore);
+    layoutPopUp->addWidget(cantiereL);
+    layoutPopUp->addWidget(cantiere);
     layoutPopUp->addWidget(speedL);
     layoutPopUp->addWidget(speed);
     layoutPopUp->addWidget(pesoL);
     layoutPopUp->addWidget(peso);
+    layoutPopUp->addWidget(lunghezzaL);
+    layoutPopUp->addWidget(lunghezza);
+
     switch (tipoT) {
     case 0:
-        temperaturaS->show();
-        carburanteS->show();
-        temperaturaSL->show();
-        carburanteSL->show();
-        layoutPopUp->addWidget(temperaturaSL);
-        layoutPopUp->addWidget(temperaturaS);
-        layoutPopUp->addWidget(carburanteSL);
-        layoutPopUp->addWidget(carburanteS);
+        numMotori->show();
+        potMotore->show();
+        consTermico->show();
+        capSerbatoi->show();
+        numMotoriL->show();
+        potMotoreL->show();
+        consTermicoL->show();
+        capSerbatoiL->show();
+        tipoMotore->show();
+        tipoCarburante->show();
+
+        layoutPopUp->addWidget(tipoMotore);
+        layoutPopUp->addWidget(numMotoriL);
+        layoutPopUp->addWidget(numMotori);
+        layoutPopUp->addWidget(potMotoreL);
+        layoutPopUp->addWidget(potMotore);
+        layoutPopUp->addWidget(tipoCarburante);
+        layoutPopUp->addWidget(consTermicoL);
+        layoutPopUp->addWidget(consTermico);
+        layoutPopUp->addWidget(capSerbatoiL);
+        layoutPopUp->addWidget(capSerbatoi);
         break;
     case 1:
-        efficenzaE->show();
-        trasmissione->show();
-        efficenzaEL->show();
-        layoutPopUp->addWidget(efficenzaEL);
-        layoutPopUp->addWidget(efficenzaE);
-        layoutPopUp->addWidget(trasmissione);
+        numMotori->show();
+        potMotore->show();
+        consElettrico->show();
+        capBatteria->show();
+        numMotoriL->show();
+        potMotoreL->show();
+        consElettricoL->show();
+        capBatteriaL->show();
+        tipoMotore->show();
+        tipoBatteria->show();
+
+        layoutPopUp->addWidget(tipoMotore);
+        layoutPopUp->addWidget(numMotoriL);
+        layoutPopUp->addWidget(numMotori);
+        layoutPopUp->addWidget(potMotoreL);
+        layoutPopUp->addWidget(potMotore);
+        layoutPopUp->addWidget(tipoBatteria);
+        layoutPopUp->addWidget(consElettricoL);
+        layoutPopUp->addWidget(consElettrico);
+        layoutPopUp->addWidget(capBatteriaL);
+        layoutPopUp->addWidget(capBatteria);
         break;
     case 2:
-        potenzaIC->show();
-        potenzaICL->show();
-        motoreIC->show();
-        motoreICL->show();
-        layoutPopUp->addWidget(potenzaICL);
-        layoutPopUp->addWidget(potenzaIC);
-        layoutPopUp->addWidget(motoreICL);
-        layoutPopUp->addWidget(motoreIC);
-        break;
-    case 3:
-        tecnologia->show();
-        layoutPopUp->addWidget(tecnologia);
-        break;
-    case 4:
-        efficenzaE->show();
-        potenzaIC->show();
-        motoreIC->show();
-        efficenzaEL->show();
-        potenzaICL->show();
-        motoreICL->show();
-        trasmissione->show();
-        primario->show();
-        layoutPopUp->addWidget(efficenzaEL);
-        layoutPopUp->addWidget(efficenzaE);
-        layoutPopUp->addWidget(potenzaICL);
-        layoutPopUp->addWidget(potenzaIC);
-        layoutPopUp->addWidget(motoreICL);
-        layoutPopUp->addWidget(motoreIC);
-        layoutPopUp->addWidget(trasmissione);
-        layoutPopUp->addWidget(primario);
-        break;
+        numVele->show();
+        potMotAusi->show();
+        numVeleL->show();
+        potMotAusiL->show();
+        motoreAusi->show();
+
+        layoutPopUp->addWidget(numVeleL);
+        layoutPopUp->addWidget(numVele);
+        layoutPopUp->addWidget(motoreAusi);
+        layoutPopUp->addWidget(potMotAusiL);
+        layoutPopUp->addWidget(potMotAusi);
+
     //default:
         //throwa qualcosa
     }
-    connect(conferma, SIGNAL(clicked()), p, SLOT(slotInserisciTreno()));
+    connect(conferma, SIGNAL(clicked()), p, SLOT(slotInsertBoat()));
     connect(annulla, SIGNAL(clicked()), this, SLOT(close()));
     layoutPopUp->addWidget(annulla);
     layoutPopUp->addWidget(conferma);
 
     setLayout(layoutPopUp);
 }
-std::string AggiuntaLayout::getNome() const{
+
+std::string InsertLayout::getNome() const{
     return nome->text().toStdString();
 }
-std::string AggiuntaLayout::getCostruttore()const{
-    return costruttore->text().toStdString();
+
+std::string InsertLayout::getCantiere() const{
+    return cantiere->text().toStdString();
 }
 
-unsigned int AggiuntaLayout::getTemperaturaS()const{
-    return temperaturaS->text().toInt();
-}
-
-double AggiuntaLayout::getEfficenzaE()const{
-    return efficenzaE->text().toDouble();
-}
-unsigned int AggiuntaLayout::getPotenzaIC()const{
-    return potenzaIC->text().toInt();
-}
-unsigned int AggiuntaLayout::getSpeed() const{
+unsigned int InsertLayout::getSpeed() const{
     return speed->text().toInt();
 }
-unsigned int AggiuntaLayout::getPeso()const{
+
+unsigned int InsertLayout::getPeso() const{
     return peso->text().toInt();
 }
-std::string AggiuntaLayout::getCarburanteS()const{
-    return carburanteS->text().toStdString();
+
+float InsertLayout::getLunghezza() const{
+    return lunghezza->text().toFloat();
 }
-std::string AggiuntaLayout::getMotoreIC()const{
-    return motoreIC->text().toStdString();
+
+unsigned int InsertLayout::getNumMotori() const{
+    return numMotori->text().toInt();
 }
-bool AggiuntaLayout::getTecnologia()const{
-    return tecnologia->currentIndex();
+
+unsigned int InsertLayout::getPotenzaMotore() const{
+    return potMotore->text().toInt();
 }
-bool AggiuntaLayout::getPrimario()const{
-    return primario->currentIndex();
+
+std::string InsertLayout::getTipoMotore() const{
+    return tipoMotore->currentIndex();
 }
-bool AggiuntaLayout::getTrasmissione()const{
-    return trasmissione->currentIndex();
+std::string InsertLayout::getTipoCarburante() const{
+    return tipoCarburante->currentIndex();
 }
-unsigned int AggiuntaLayout::getTipo()const{
+
+std::string InsertLayout::getTipoBatteria() const{
+    return tipoBatteria->currentIndex();
+}
+
+float InsertLayout::getConsumoElettrico() const{
+    return consElettrico->text().toFloat();
+}
+
+float InsertLayout::getConsumoTermico() const{
+    return consTermico->text().toFloat();
+}
+
+unsigned int InsertLayout::getCapSerbatoi() const{
+    return capSerbatoi->text().toInt();
+}
+
+unsigned int InsertLayout::getCapBatteria() const{
+    return capBatteria->text().toInt();
+}
+
+unsigned int InsertLayout::getNumVele() const{
+    return numVele->text().toInt();
+}
+
+bool InsertLayout::getMotoreAusiliario() const{
+    return motoreAusi->currentIndex();
+}
+
+unsigned int InsertLayout::getPotenzaMotoreAusiliario() const{
+    return potMotAusi->text().toInt();
+}
+
+unsigned int InsertLayout::getTipo() const{
     return tipo;
 }

@@ -13,12 +13,12 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 
-/*
-#include "model.h"
-#include "menubar.h"
-#include "mainlayout.h"
-#include "insertlayout.h"
-#include "modifylayout.h"
+
+#include "Modello/model.h"
+#include "Vista/menubar.h"
+#include "Vista/mainlayout.h"
+#include "Vista/insertlayout.h"
+#include "Vista/modifylayout.h"
 #include "boatlist.h"
 
 
@@ -37,7 +37,7 @@ private:
     void searchCantiere(std::string);
     void searchPeso(unsigned int,bool);
     void searchVelocita(unsigned int,bool);
-    void searchLunghezza(unsigned int,bool);
+    void searchLunghezza(float,bool);
     void searchCarburanteVapore(std::string);
     void searchTemperaturaVapore(unsigned int, bool);
     void searchEfficenzaElettrico(double,bool);
@@ -73,5 +73,5 @@ public slots:
     void slotType();
     void slotPatente();
 };
-*/
+
 #endif // MAINWINDOW_H

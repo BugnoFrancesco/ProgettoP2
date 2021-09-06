@@ -35,7 +35,10 @@ SOURCES += \
     Vista/menubar.cpp \
     Vista/mainlayout.cpp \
     Vista/insertlayout.cpp \
-    Vista/modifylayout.cpp
+    Vista/modifylayout.cpp \
+    Vista/boatlist.cpp \
+    Vista/boatexception.cpp \
+    Vista/infolayout.cpp
 
 
 HEADERS += \
@@ -51,5 +54,8 @@ HEADERS += \
     Vista/menubar.h \
     Vista/mainlayout.h \
     Vista/insertlayout.h \
-    Vista/modifylayout.h
+    Vista/modifylayout.h \
+    Vista/boatlist.h \
+    Vista/boatexception.h \
+    Vista/infolayout.h
 
