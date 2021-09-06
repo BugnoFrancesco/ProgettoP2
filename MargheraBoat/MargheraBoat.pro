@@ -31,7 +31,11 @@ SOURCES += \
         termico.cpp \
         elettrico.cpp \
         model.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    menubar.cpp \
+    mainlayout.cpp \
+    insertlayout.cpp \
+    modifylayout.cpp
 
 HEADERS += \
         imbarcazione.h \
@@ -42,4 +46,8 @@ HEADERS += \
         deepptr.h \
         container.h \
         model.h \
-    mainwindow.h
+    mainwindow.h \
+    menubar.h \
+    mainlayout.h \
+    insertlayout.h \
+    modifylayout.h

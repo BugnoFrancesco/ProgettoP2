@@ -5,8 +5,8 @@ using std::string;
 using std::cerr;
 using std::cout;
 
-Termico::Termico(const std::string& m, const std::string& c, unsigned int p, unsigned int v, unsigned int l, unsigned int numM, unsigned int potM, tipo_motore tM,
-                 tipo_combustione tC, float con, unsigned int capS): Motore(m,c,p,v,l,numM,potM,tM), tipoC(tC), consumo(con), capienzaSerbatoi(capS){}
+Termico::Termico(const std::string& m, const std::string& c, unsigned int p, unsigned int v, unsigned int l, unsigned int numM, unsigned int potM, std::string tM,
+                 std::string tC, float con, unsigned int capS): Motore(m,c,p,v,l,numM,potM,tM), tipoC(tC), consumo(con), capienzaSerbatoi(capS){}
 
 float Termico::getConsumo() const{
     return consumo;
@@ -16,7 +16,7 @@ unsigned int Termico::getCapienzaSerbatoi() const{
     return capienzaSerbatoi;
 }
 
-tipo_combustione Termico::getTipoCombustione() const{
+std::string Termico::getTipoCombustione() const{
     return tipoC;
 }
 
@@ -27,7 +27,7 @@ void Termico::setConsumo(float con){
 void Termico::setCapienzaSerbatoi(unsigned int capS){
     capienzaSerbatoi=capS;
 }
-void Termico::setTipoCombustione(tipo_combustione tC){
+void Termico::setTipoCombustione(std::string tC){
     tipoC=tC;
 }
 
@@ -41,9 +41,9 @@ std::string Termico::boat_toString() const{
     std::string s=Motore::boat_toString();
     std::string cons=std::to_string(getConsumo());
     std::string c_serbatoi=std::to_string(getCapienzaSerbatoi());
-    std::string t_combust="";
-    if(getTipoCombustione()==diesel) t_combust="diesel";
-    else if(getTipoCombustione()==benzina) t_combust="benzina";
+    std::string t_combust=getTipoCombustione();
+    /*if(getTipoCombustione()==diesel) t_combust="diesel";
+    else if(getTipoCombustione()==benzina) t_combust="benzina";*/
     s.append("\nConsumo: "+cons+" L/h"+"\nCapienza Serbatoi: "+c_serbatoi+"\nTipo combustione: "+t_combust);
     return s;
 }

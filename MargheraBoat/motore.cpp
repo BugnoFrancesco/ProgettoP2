@@ -5,7 +5,7 @@ using std::string;
 using std::cerr;
 using std::cout;
 
-Motore::Motore(const std::string& m, const std::string& c, unsigned int p, unsigned int v, unsigned int l, unsigned int numM, unsigned int potM, tipo_motore tM):
+Motore::Motore(const std::string& m, const std::string& c, unsigned int p, unsigned int v, unsigned int l, unsigned int numM, unsigned int potM, std::string tM):
     Imbarcazione(m,c,p,v,l), num_motori(numM), potenza_motore(potM), tipoM(tM){}
 
 unsigned int Motore::getNumMotori() const{
@@ -16,7 +16,7 @@ unsigned int Motore::getPotenzaMotore() const{
     return potenza_motore;
 }
 
-tipo_motore Motore::getTipoMotore() const{
+std::string Motore::getTipoMotore() const{
     return tipoM;
 }
 
@@ -26,7 +26,7 @@ void Motore::setNumMotori(unsigned int numM){
 void Motore::setPotenzaMotore(unsigned int potM){
     potenza_motore=potM;
 }
-void Motore::setTipoMotore(tipo_motore tM){
+void Motore::setTipoMotore(std::string tM){
     tipoM=tM;
 }
 
@@ -48,10 +48,10 @@ std::string Motore::boat_toString() const{
     std::string s=Imbarcazione::boat_toString();
     std::string n_motori=std::to_string(getNumMotori());
     std::string p_motore=std::to_string(getPotenzaMotore());
-    std::string t_motore="";
-    if(getTipoMotore()==fuoribordo) t_motore="fuoribordo";
+    std::string t_motore=getTipoMotore();
+    /*if(getTipoMotore()==fuoribordo) t_motore="fuoribordo";
     else if(getTipoMotore()==entrobordo) t_motore="entrobordo";
-    else if(getTipoMotore()==entrofuoribordo) t_motore="entrofuoribordo";
+    else if(getTipoMotore()==entrofuoribordo) t_motore="entrofuoribordo";*/
     s.append("\nNumero motori: "+n_motori+"\nPotenza singolo motore: "+p_motore+"\nTipo motore: "+t_motore);
     return s;
 }

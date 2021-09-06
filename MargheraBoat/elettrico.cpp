@@ -5,8 +5,8 @@ using std::string;
 using std::cerr;
 using std::cout;
 
-Elettrico::Elettrico(const std::string& m, const std::string& c, unsigned int p, unsigned int v, unsigned int l, unsigned int numM, unsigned int potM, tipo_motore tM,
-                 tipo_batteria tB, float con, unsigned int capB): Motore(m,c,p,v,l,numM,potM,tM), tipoB(tB), consumo(con), capienzaBatteria(capB){}
+Elettrico::Elettrico(const std::string& m, const std::string& c, unsigned int p, unsigned int v, unsigned int l, unsigned int numM, unsigned int potM, std::string tM,
+                 std::string tB, float con, unsigned int capB): Motore(m,c,p,v,l,numM,potM,tM), tipoB(tB), consumo(con), capienzaBatteria(capB){}
 
 float Elettrico::getConsumo() const{
     return consumo;
@@ -16,7 +16,7 @@ unsigned int Elettrico::getCapienzaBatteria() const{
     return capienzaBatteria;
 }
 
-tipo_batteria Elettrico::getTipoBatteria() const{
+std::string Elettrico::getTipoBatteria() const{
     return tipoB;
 }
 
@@ -26,7 +26,7 @@ void Elettrico::setConsumo(float con){
 void Elettrico::setCapienzaBatteria(unsigned int capB){
     capienzaBatteria=capB;
 }
-void Elettrico::setTipoBatteria(tipo_batteria tB){
+void Elettrico::setTipoBatteria(std::string tB){
     tipoB=tB;
 }
 
@@ -40,9 +40,9 @@ std::string Elettrico::boat_toString() const{
     std::string s=Motore::boat_toString();
     std::string cons=std::to_string(getConsumo());
     std::string c_batteria=std::to_string(getCapienzaBatteria());
-    std::string t_batteria="";
-    if(getTipoBatteria()==litio) t_batteria="litio";
-    else if(getTipoBatteria()==piombo) t_batteria="piombo";
+    std::string t_batteria=getTipoBatteria();
+    /*if(getTipoBatteria()==litio) t_batteria="litio";
+    else if(getTipoBatteria()==piombo) t_batteria="piombo";*/
     s.append("\nConsumo: "+cons+" L/h"+"\nCapienza Serbatoi: "+c_batteria+"\nTipo combustione: "+t_batteria);
     return s;
 }

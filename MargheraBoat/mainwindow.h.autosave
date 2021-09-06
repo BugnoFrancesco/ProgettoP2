@@ -34,7 +34,7 @@ private:
 
     //filtri
     void searchNome(std::string);
-    void searchCantiere(std::string);
+    void searchCostruttore(std::string);
     void searchPeso(unsigned int,bool);
     void searchVelocita(unsigned int,bool);
     void searchLunghezza(unsigned int,bool);
