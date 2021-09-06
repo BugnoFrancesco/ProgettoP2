@@ -13,7 +13,7 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 
-
+/*
 #include "model.h"
 #include "menubar.h"
 #include "mainlayout.h"
@@ -73,5 +73,5 @@ public slots:
     void slotType();
     void slotPatente();
 };
-
+*/
 #endif // MAINWINDOW_H

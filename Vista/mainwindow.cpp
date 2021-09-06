@@ -10,7 +10,6 @@
 using std::string;
 
 
-
 MainWindow::MainWindow(Model* m, QWidget *parent): QWidget(parent), menu(new MenuBar(this)), modello(m), layout(new MainLayout(this)), layoutIns(nullptr), layoutMod(nullptr)
 {
     setWindowTitle("Margera Boat");
@@ -698,9 +697,6 @@ MainWindow::~MainWindow()
 {
     delete modello;
 }
-
-
-
 
 
 

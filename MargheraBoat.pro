@@ -25,29 +25,31 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        imbarcazione.cpp \
-        motore.cpp \
-        vela.cpp \
-        termico.cpp \
-        elettrico.cpp \
-        model.cpp \
-    mainwindow.cpp \
-    menubar.cpp \
-    mainlayout.cpp \
-    insertlayout.cpp \
-    modifylayout.cpp
+        Modello/Gerarchia/imbarcazione.cpp \
+        Modello/Gerarchia/motore.cpp \
+        Modello/Gerarchia/vela.cpp \
+        Modello/Gerarchia/termico.cpp \
+        Modello/Gerarchia/elettrico.cpp \
+        Modello/model.cpp \
+    Vista/mainwindow.cpp \
+    Vista/menubar.cpp \
+    Vista/mainlayout.cpp \
+    Vista/insertlayout.cpp \
+    Vista/modifylayout.cpp
+
 
 HEADERS += \
-        imbarcazione.h \
-        motore.h \
-        vela.h \
-        termico.h \
-        elettrico.h \
-        deepptr.h \
-        container.h \
-        model.h \
-    mainwindow.h \
-    menubar.h \
-    mainlayout.h \
-    insertlayout.h \
-    modifylayout.h
+        Modello/Gerarchia/imbarcazione.h \
+        Modello/Gerarchia/motore.h \
+        Modello/Gerarchia/vela.h \
+        Modello/Gerarchia/termico.h \
+        Modello/Gerarchia/elettrico.h \
+        Modello/deepptr.h \
+        Modello/container.h \
+        Modello/model.h \
+    Vista/mainwindow.h \
+    Vista/menubar.h \
+    Vista/mainlayout.h \
+    Vista/insertlayout.h \
+    Vista/modifylayout.h
+

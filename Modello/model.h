@@ -3,9 +3,9 @@
 
 #include "container.h"
 #include "deepptr.h"
-#include "elettrico.h"
-#include "termico.h"
-#include "vela.h"
+#include "Gerarchia/elettrico.h"
+#include "Gerarchia/termico.h"
+#include "Gerarchia/vela.h"
 
 class Model
 {
