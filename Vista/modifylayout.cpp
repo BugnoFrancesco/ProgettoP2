@@ -1,54 +1,104 @@
 #include "modifylayout.h"
+#include "QPushButton"
 //#include "supporto/nievaexception.h"
 
 
-ModifyLayout::ModifyLayout(QWidget *parent, unsigned int tipo, unsigned int i): AggiuntaLayout(parent,tipo), ind(i), modifica(new QPushButton(this))
+ModifyLayout::ModifyLayout(QWidget *parent, unsigned int tipo, unsigned int i): InsertLayout(parent,tipo), ind(i),
+    modifica(new QPushButton(this))
 {
     conferma->hide();
     modifica->setText("Modifica");
     layoutPopUp->addWidget(modifica);
 
-    connect(modifica, SIGNAL(clicked()), parent, SLOT(slotModificaTreno()));
+    connect(modifica, SIGNAL(clicked()), parent, SLOT(slotModifiyBoat()));
 }
 void ModifyLayout::setNome(std::string str){
     nome->setText(QString::fromStdString(str));
 }
 void ModifyLayout::setCantiere(std::string str){
-    costruttore->setText(QString::fromStdString(str));
+    cantiere->setText(QString::fromStdString(str));
 }
 void ModifyLayout::setSpeed(unsigned int x){
     speed->setText(QString::number(x));
 }
 void ModifyLayout::setPeso(unsigned int x){
-     peso->setText(QString::number(x));
+    peso->setText(QString::number(x));
 }
-void ModifyLayout::setPotenzaIC(unsigned int x){
-    potenzaIC->setText(QString::number(x));
+
+void ModifyLayout::setLunghezza(float x)
+{
+    lunghezza->setText(QString::number(x));
 }
-void ModifyLayout::setTemperaturaS(unsigned int x){
-    temperaturaS->setText(QString::number(x));
+
+void ModifyLayout::setNumMotori(unsigned int x)
+{
+    numMotori->setText(QString::number(x));
 }
-void ModifyLayout::setEfficenzaE(double x){
-     efficenzaE->setText(QString::number(x));
+
+void ModifyLayout::setPotenzaMotore(unsigned int x)
+{
+    potMotore->setText(QString::number(x));
 }
-void ModifyLayout::setCarburanteS(std::string str){
-    carburanteS->setText(QString::fromStdString(str));
+
+//? da fare
+void ModifyLayout::setTipoMotore(std::string str)
+{
+    if(str=="entrobordo") tipoMotore->setCurrentIndex(0);
+    else if(str=="fuoribordo")  tipoMotore->setCurrentIndex(1);
+    else if(str=="entrofuoribordo") tipoMotore->setCurrentIndex(2);
 }
-void ModifyLayout::setMotoreIC(std::string str){
-    motoreIC->setText(QString::fromStdString(str));
+void ModifyLayout::setTipoCarburante(std::string str)
+{
+    if(str=="diesel") tipoCarburante->setCurrentIndex(0);
+    else if(str=="benzina")  tipoCarburante->setCurrentIndex(1);
 }
-void ModifyLayout::setPrimario(bool x){
-    if(x==false) primario->setCurrentIndex(0);
-    else primario->setCurrentIndex(1);
+void ModifyLayout::setTipoBatteria(std::string str)
+{
+    if(str=="piombo") tipoBatteria->setCurrentIndex(0);
+    else if(str=="litio")  tipoBatteria->setCurrentIndex(1);
 }
-void ModifyLayout::setTrasmissione(bool x){
-    if(x==false) trasmissione->setCurrentIndex(0);
-    else trasmissione->setCurrentIndex(1);//
+void ModifyLayout::setMotoreAusiliario(bool y)
+{
+    if(y)   motoreAusi->setCurrentIndex(0);
+    else    motoreAusi->setCurrentIndex(1);
 }
-void ModifyLayout::setTecnologia(bool x){
-    if(x==false) tecnologia->setCurrentIndex(0);
-    else tecnologia->setCurrentIndex(1);
+
+
+void ModifyLayout::setConsumoTermico(std::string str)
+{
+    consTermico->setText(QString::fromStdString(str));
 }
+
+void ModifyLayout::setConsumoElettrico(std::string str)
+{
+    consElettrico->setText(QString::fromStdString(str));
+}
+
+void ModifyLayout::getCapSerbatoi(unsigned int x)
+{
+    capSerbatoi->setText(QString::number(x));
+}
+
+void ModifyLayout::setCapBatteria(unsigned int x)
+{
+    capBatteria->setText(QString::number(x));
+}
+
+void ModifyLayout::setNumVele(unsigned int x)
+{
+    numVele->setText(QString::number(x));
+}
+
+void ModifyLayout::setPotenzaMotoreAusiliario(unsigned int x)
+{
+    potMotAusi->setText(QString::number(x));
+}
+
+void ModifyLayout::setTipo(unsigned int x)
+{
+    tipo = x;
+}
+
 unsigned int ModifyLayout::getInd() const{
     return ind;
 }

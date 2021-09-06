@@ -8,20 +8,26 @@ class ModifyLayout: public InsertLayout {
     unsigned int ind;
     QPushButton* modifica;
 public:
-    ModificaLayout(QWidget *parent = nullptr, unsigned int tipo=0, unsigned int ind=0);
+    ModifyLayout(QWidget *parent = nullptr, unsigned int tipo=0, unsigned int ind=0);
 
     void setNome(std::string);
-    void setCostruttore(std::string);
+    void setCantiere(std::string);
     void setSpeed(unsigned int);
     void setPeso(unsigned int);
-    void setPotenzaIC(unsigned int);
-    void setTemperaturaS(unsigned int);
-    void setEfficenzaE(double);
-    void setCarburanteS(std::string);
-    void setMotoreIC(std::string);
-    void setPrimario(bool);
-    void setTrasmissione(bool);
-    void setTecnologia(bool);
+    void setLunghezza(float);
+    void setNumMotori(unsigned int);
+    void setPotenzaMotore(unsigned int);
+    void setTipoMotore(std::string);
+    void setTipoCarburante(std::string);
+    void setTipoBatteria(std::string);
+    void setConsumoTermico(std::string);
+    void setConsumoElettrico(std::string);
+    void getCapSerbatoi(unsigned int);
+    void setCapBatteria(unsigned int);
+    void setNumVele(unsigned int);
+    void setMotoreAusiliario(bool);
+    void setPotenzaMotoreAusiliario(unsigned int);
+    void setTipo(unsigned int);
     unsigned int getInd() const;
 
 };
