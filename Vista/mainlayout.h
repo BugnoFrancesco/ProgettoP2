@@ -5,8 +5,6 @@
 #include <QLabel>
 //#include "supporto/combotype.h"
 //#include "supporto/combofilter.h"
-#include "combotype.h"
-#include "combofilter.h"
 #include <QListWidget>
 #include <QTextBrowser>
 #include <QPushButton>
@@ -15,7 +13,7 @@
 #include <QAction>
 #include <QVBoxLayout>
 #include <QLineEdit>
-//#include "supporto/boatlist.h"
+#include <QComboBox>
 #include "boatlist.h"
 #include <string>
 
@@ -28,8 +26,10 @@ class MainLayout: public QWidget
     QLabel* text3;
     QLabel* text4;
 
-    ComboType* selectType;
-    ComboFilter* selectFilter;
+    //ComboType* selectType;
+    //ComboFilter* selectFilter;
+    QComboBox* selectType;
+    QComboBox* selectFilter;
 
     BoatListWidget *boatList;
 

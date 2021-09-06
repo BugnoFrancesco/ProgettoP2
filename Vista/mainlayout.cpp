@@ -1,6 +1,6 @@
 #include "mainlayout.h"
 #include "menubar.h"
-#include "model.h"
+#include "Modello/model.h"
 #include <iostream>
 
 MainLayout::MainLayout(QWidget* p): QWidget(p),

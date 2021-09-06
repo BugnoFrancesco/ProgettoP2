@@ -8,39 +8,40 @@
 #include <QStringList>
 #include <QPushButton>
 #include <QLabel>
+#include <QComboBox>
 #include <string>
-//#include "supporto/comboboxmotoreprimario.h"
-//#include "supporto/comboboxtech.h"
-//#include "supporto/comboboxtrasmissione.h"
-
 
 class InsertLayout: public QDialog
 {
     Q_OBJECT
+
 protected:
     QVBoxLayout* layoutPopUp;
-    QLabel *nomeL, *costruttoreL, *temperaturaSL, *efficenzaEL, *potenzaICL, *speedL, *pesoL, *carburanteSL, *motoreICL;
-    QLineEdit *nome, *costruttore, *temperaturaS, *efficenzaE, *potenzaIC, *speed, *peso, *carburanteS, *motoreIC;
-    ComboBoxTech *tecnologia;
-    ComboBoxMotorePrimario *primario;
-    ComboBoxTrasmissione *trasmissione;
+    QLabel *nomeL, *cantiereL, *speedL, *pesoL, *lunghezzaL, *numMotoriL, *potMotoreL, *consTermicoL, *capSerbatoiL, *consElettricoL, *capBatteriaL, *numVeleL, *potMotAusiL;
+    QLineEdit *nome, *cantiere, *speed, *peso, *lunghezza, *numMotori, *potMotore, *consTermico, *capSerbatoi, *consElettrico, *capBatteria, *numVele, *potMotAusi;
+    QComboBox *tipoMotore, *tipoCarburante, *tipoBatteria, *motoreAusi;
     QPushButton *conferma, *annulla;
     unsigned int tipo;
 public:
     std::string getNome() const;
-    std::string getCostruttore()const;
-    unsigned int getTemperaturaS()const;
-    double getEfficenzaE()const;
-    unsigned int getPotenzaIC()const;
+    std::string getCantiere()const;
     unsigned int getSpeed() const;
     unsigned int getPeso()const;
-    std::string getCarburanteS()const;
-    std::string getMotoreIC()const;
-    bool getTecnologia()const;
-    bool getPrimario()const;
-    bool getTrasmissione()const;
+    float getLunghezza() const;
+    unsigned int getNumMotori()const;
+    unsigned int getPotenzaMotore()const;
+    std::string getTipoMotore()const;
+    std::string getTipoCarburante()const;
+    std::string getTipoBatteria()const;
+    float getConsumoTermico()const;
+    float getConsumoElettrico()const;
+    unsigned int getCapSerbatoi()const;
+    unsigned int getCapBatteria()const;
+    unsigned int getNumVele()const;
+    bool getMotoreAusiliario()const;
+    unsigned int getPotenzaMotoreAusiliario()const;
     unsigned int getTipo()const;
-    AggiuntaLayout(QWidget * =nullptr, int tipoT=0);
+    InsertLayout(QWidget * =nullptr, int tipoT=0);
 };
 
 #endif // INSERTLAYOUT_H
