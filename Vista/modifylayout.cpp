@@ -10,7 +10,7 @@ ModifyLayout::ModifyLayout(QWidget *parent, unsigned int tipo, unsigned int i): 
     modifica->setText("Modifica");
     layoutPopUp->addWidget(modifica);
 
-    connect(modifica, SIGNAL(clicked()), parent, SLOT(slotModifiyBoat()));
+    connect(modifica, SIGNAL(clicked()), parent, SLOT(slotModifyBoat()));
 }
 void ModifyLayout::setNome(std::string str){
     nome->setText(QString::fromStdString(str));
