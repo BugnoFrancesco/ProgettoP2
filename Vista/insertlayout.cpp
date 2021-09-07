@@ -94,6 +94,11 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
     tipoBatteria->hide();
     motoreAusi->hide();
 
+    tipoMotoreL->hide();
+    tipoCarburanteL->hide();
+    tipoBatteriaL->hide();
+    motoreAusiL->hide();
+
     layoutPopUp->addWidget(nomeL);
     layoutPopUp->addWidget(nome);
     layoutPopUp->addWidget(cantiereL);
@@ -117,6 +122,8 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
         capSerbatoiL->show();
         tipoMotore->show();
         tipoCarburante->show();
+        tipoMotoreL->show();
+        tipoCarburanteL->show();
 
         layoutPopUp->addWidget(tipoMotoreL);
         layoutPopUp->addWidget(tipoMotore);
@@ -142,6 +149,8 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
         capBatteriaL->show();
         tipoMotore->show();
         tipoBatteria->show();
+        tipoMotoreL->show();
+        tipoBatteriaL->show();
 
         layoutPopUp->addWidget(tipoMotoreL);
         layoutPopUp->addWidget(tipoMotore);
@@ -162,6 +171,7 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
         numVeleL->show();
         potMotAusiL->show();
         motoreAusi->show();
+        motoreAusiL->show();
 
         layoutPopUp->addWidget(numVeleL);
         layoutPopUp->addWidget(numVele);
