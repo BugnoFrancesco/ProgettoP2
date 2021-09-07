@@ -48,7 +48,7 @@ private:
     void searchTipoCarburante(std::string);
     void searchTipoBatteria(std::string);
     void searchNumVele(unsigned int,bool);
-    void searchMotoreAusi(bool,bool);
+    void searchMotoreAusi(std::string);
     void searchPotenzaMotoreAusi(unsigned int,bool);
 
 public:
@@ -58,7 +58,6 @@ public:
 
 public slots:
     void slotShowInfoGenerali();
-    void slotConversioneKMh();
     void slotConversioneKMh();
     void slotAutore();
     void slotShowBoat();

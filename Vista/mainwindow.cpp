@@ -115,22 +115,22 @@ void MainWindow::slotInsertBoat() try {
         float consumoT=layoutIns->getConsumoTermico();
         unsigned int capSerbatoi=layoutIns->getCapSerbatoi();
         std::string tipoCarb=layoutIns->getTipoCarburante();
-        Termico* boat=new Termico(nome, cantiere, peso, speed, lunghezza, numMotori, potMotore, tipoMotore, consumoT, capSerbatoi, tipoCarb);
+        Termico* boat=new Termico(nome, cantiere, peso, speed, lunghezza, numMotori, potMotore, tipoMotore, tipoCarb, consumoT, capSerbatoi);
         modello->push_end(boat);
     }else if(x==1){
         unsigned int numMotori=layoutIns->getNumMotori();
         unsigned int potMotore=layoutIns->getPotenzaMotore();
         std::string tipoMotore=layoutIns->getTipoMotore();
         float consumoE=layoutIns->getConsumoElettrico();
-        unsigned int capBatteria=layoutIns->getCapBatteria();
+        std::string capBatteria=layoutIns->getCapBatteria();
         std::string tipoBatt=layoutIns->getTipoBatteria();
-        Elettrico* boat=new Elettrico(nome, cantiere, peso, speed, lunghezza, numMotori, potMotore, tipoMotore, consumoE, capBatteria, tipoBatt);
+        Elettrico* boat=new Elettrico(nome, cantiere, peso, speed, lunghezza, numMotori, potMotore, tipoMotore, tipoBatt, consumoE, capBatteria);
         modello->push_end(boat);
     }else if(x==2){
         unsigned int numVele=layoutIns->getNumVele();
         unsigned int potMotoreAus=layoutIns->getPotenzaMotoreAusiliario();
         bool motoreAus=layoutIns->getMotoreAusiliario();
-        Vela* boat= new Vela(nome, cantiere, peso, speed, lunghezza, numVele, potMotoreAus, motoreAus);
+        Vela* boat= new Vela(nome, cantiere, peso, speed, lunghezza, motoreAus, potMotoreAus, numVele);
         modello->push_end(boat);
     }
     //prende l'ultima imbarcazione del modello e la aggiunge alla lista
@@ -212,7 +212,7 @@ void MainWindow::slotModifyBoat(){
         float consumoTNew=layoutMod->getConsumoTermico();
         unsigned int capSerbatoiNew=layoutMod->getCapSerbatoi();
         std::string tipoCarbNew=layoutMod->getTipoCarburante();
-        Termico* barcaDaSostituire=new Termico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, consumoTNew, capSerbatoiNew, tipoCarbNew);
+        Termico* barcaDaSostituire=new Termico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, tipoCarbNew, consumoTNew, capSerbatoiNew);
         //modello->sostituisci(barcaDaSostituire, x);
     }else if(tip==1){
         unsigned int numMotoriNew=layoutMod->getNumMotori();
@@ -221,13 +221,15 @@ void MainWindow::slotModifyBoat(){
         float consumoENew=layoutMod->getConsumoElettrico();
         unsigned int capBatteriaNew=layoutMod->getCapBatteria();
         std::string tipoBattNew=layoutMod->getTipoBatteria();
-        Elettrico* barcaDaSostituire=new Elettrico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, consumoENew, capBatteriaNew, tipoBattNew);
+        Elettrico* barcaDaSostituire=new Elettrico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, tipoBattNew, consumoENew, capBatteriaNew);
         //modello->sostituisci(barcaDaSostituire, x);
     }else if(tip==2){
         unsigned int numVeleNew=layoutMod->getNumMotori();
         unsigned int potMotoreAusNew=layoutMod->getPotenzaMotoreAusiliario();
-        std::string motoreAusNew=layoutMod->getMotoreAusiliario();
-        Vela* barcaDaSostituire=new Vela(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numVeleNew, potMotoreAusNew, motoreAusNew);
+        bool motoreAusNew=layoutMod->getMotoreAusiliario();
+        Vela* barcaDaSostituire=new Vela(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, motoreAusNew, potMotoreAusNew, numVeleNew);
+        modello->erase(x);
+        modello->push_end(barcaDaSostituire);
         //modello->sostituisci(barcaDaSostituire, x);
     }
     //refresh lista
@@ -802,13 +804,13 @@ void MainWindow::searchMotoreAusi(std::string n){
  */
 void MainWindow::slotConsumi() try{
     if(layout->getList()->getItem()){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
-        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->Termico::calcoloConsumi(layout->getConsumi());
+        if(layout->getList()->getItem()->getImbarcazione()->tipoPropulsione()=="Motore Termico"){
+        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloConsumi(layout->getConsumi());
         std::string str="I Litri necessari per navigare "+std::to_string(layout->getConsumi())+" ore sono: "+std::to_string(mostra)+" L";
         QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
         }
-        else if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
-            unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->Elettrico::calcoloConsumi(layout->getConsumi());
+        else if(layout->getList()->getItem()->getImbarcazione()->tipoPropulsione()=="Motore Elettrico"){
+            unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloConsumi(layout->getConsumi());
             std::string str="I KW necessari per navigare "+std::to_string(layout->getConsumi())+" ore sono: "+std::to_string(mostra)+" KW";
             QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
         }
@@ -825,13 +827,13 @@ catch(...){}
  */
 void MainWindow::slotAutonomia() try{
     if(layout->getList()->getItem()){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
-            unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->Termico::calcoloAutonomia(layout->getAutonomia());
+        if(layout->getList()->getItem()->getImbarcazione()->tipoPropulsione()=="Motore Termico"){
+            unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloAutonomia(layout->getAutonomia());
             std::string str="Il tempo di autonomia della barca con "+std::to_string(layout->getConsumi())+"L di carburante imbarcato e': "+std::to_string(mostra);
             QMessageBox::information(this,"Nieva Trains",QString::fromStdString(str));
         }
-        else if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
-            unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->Elettrico::calcoloAutonomia(layout->getAutonomia());
+        else if(layout->getList()->getItem()->getImbarcazione()->tipoPropulsione()=="Motore Elettrico"){
+            unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloAutonomia(layout->getAutonomia());
             std::string str="Il tempo di autonomia della barca con "+std::to_string(layout->getConsumi())+"KW di carica batterie e': "+std::to_string(mostra);
             QMessageBox::information(this,"Nieva Trains",QString::fromStdString(str));
         }
@@ -870,8 +872,8 @@ void MainWindow::slotMiglia() try{
  */
 void MainWindow::slotType() try{
     if(layout->getList()->getItem()){
-        std::string mostra=layout->getList()->getItem()->getImbarcazione()->tipoPropulsione();
-        std::string str="Il tipo di propulsione di quest'imbarcazione e': "+mostra;
+        std::string mostra=layout->getList()->getItem()->getImbarcazione()->tipoImbarcazione();
+        std::string str="Il tipo di quest'imbarcazione e': "+mostra;
         QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
     }
 } catch(...){}
