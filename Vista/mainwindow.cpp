@@ -2,13 +2,13 @@
 //#include "supporto/combotype.h"
 #include <QMessageBox>
 #include <QString>
-//#include "supporto/infolayout.h"
+#include "infolayout.h"
 #include <iostream>
 #include <QFile>
 #include <QFileDialog>
-//#include "supporto/nievaexception.h"
+#include "boatexception.h"
 using std::string;
-
+using std::cout;
 
 MainWindow::MainWindow(Model* m, QWidget *parent): QWidget(parent), menu(new MenuBar(this)), modello(m), layout(new MainLayout(this)), layoutIns(nullptr), layoutMod(nullptr)
 {
@@ -26,7 +26,7 @@ MainWindow::MainWindow(Model* m, QWidget *parent): QWidget(parent), menu(new Men
 void MainWindow::refreshList(){
     layout->getList()->clear();
     for(unsigned int i=0; i<modello->numImbarcazioni(); i++)
-        layout->getList()->addTrenoList(modello->getImbarcazione(i),i);
+        layout->getList()->addImbarcazioneList(modello->getImbarcazione(i),i);
 }
 
 /**
@@ -47,7 +47,7 @@ void MainWindow::slotShowInfoGenerali(){
 }
 
 /**
- * @brief slotAutori mostra in una finestra di dialogo l'autore del programma
+ * @brief slotAutore mostra in una finestra di dialogo l'autore del programma
  */
 void MainWindow::slotAutore()
 {
@@ -58,200 +58,177 @@ void MainWindow::slotAutore()
  * @brief slotRemoveBoat rimuove l'imbarcazione selezionata nella lista delle imbarcazioni
  */
 void MainWindow::slotRemoveBoat() try {
-    if(layout->estraiTrenoSelezionato()==-1)   throw new BoatException("Seleziona un'imbarcazione esistente da eliminare");
-        unsigned int t=layout->estraiTrenoSelezionato();
+    if(layout->estraiBarcaSelezionata()==-1)   throw new BoatException("Seleziona un'imbarcazione esistente da eliminare");
+        unsigned int b=layout->estraiBarcaSelezionata();
         unsigned int i=layout->getList()->getItem()->getRealIndex();
-        layout->eliminaTreno(t);
+        layout->eliminaBarca(b);
         modello->erase(i);
         refreshList();
-}catch(NievaException* e){
-    QMessageBox::warning(this,"Nieva Trains",QString::fromStdString(e->getMessage()));
+}catch(BoatException* e){
+    QMessageBox::warning(this,"Marghera Boat",QString::fromStdString(e->getMessage()));
 }
 
 /**
- * @brief slotShowTreno mostra le caratteristiche del treno selezionato nella lista dei treni nell'apposito spazio
+ * @brief slotShowBoat mostra le caratteristiche dell'imbarcazione selezionata nella lista delle imbarcazioni
  */
-void MainWindow::slotShowTreno(){
+void MainWindow::slotShowBoat(){
     string str="";
-    if(layout->estraiTrenoSelezionato()!=-1 && layout->getList()->getItem()){
-        str=modello->treno2string(layout->getList()->getItem()->getRealIndex());
+    if(layout->estraiBarcaSelezionata()!=-1 && layout->getList()->getItem()){
+        str=modello->boat_toString(layout->getList()->getItem()->getRealIndex());
     }
-    layout->stampaDettagliTreno(str);
+    layout->stampaDettagliBarca(str);
 }
 /**
- * @brief slotFlush svuota la lista dei treni ed il modello
+ * @brief slotFlush svuota la lista delle imbarcazioni ed il modello
  */
 void MainWindow::slotFlush(){
     layout->flushList();
     modello->clear();
 }
 /**
- * @brief slotShowInserimentoTreno fa comparire la finestra di inserimento treno del tipo selezionato dall'utente
+ * @brief slotShowInsertBoat fa comparire la finestra di inserimento dell'imbarcazione del tipo selezionato dall'utente
  */
-void MainWindow::slotShowInserimentoTreno(){
-    int x=layout->getTrenoInserimento();
-    layoutAdd=new AggiuntaLayout(this,x);
-    layoutAdd->resize(250,350);
-    layoutAdd->exec();
+void MainWindow::slotShowInsertBoat(){
+    int x=layout->getInserimentoBarca();
+    layoutIns=new InsertLayout(this,x);
+    layoutIns->resize(250,350);
+    layoutIns->exec();
 }
 /**
  * @brief slotInserisciTreno crea un nuovo treno con le informazioni date dall'utente e lo inserisce nel modello
  */
-void MainWindow::slotInserisciTreno() try {
-    unsigned int x=layoutAdd->getTipo();
-    std::string nome=layoutAdd->getNome();
+void MainWindow::slotInsertBoat() try {
+    unsigned int x=layoutIns->getTipo();
+    std::string nome=layoutIns->getNome();
     std::string nome_trimmed=nome;
     nome_trimmed.erase(nome_trimmed.begin(), std::find_if(nome_trimmed.begin(), nome_trimmed.end(),
             std::not1(std::ptr_fun<int, int>(std::isspace))));
-    if(nome_trimmed=="") throw new NievaException("Dai un nome al treno");
-    std::string costruttore=layoutAdd->getCostruttore();
-    unsigned int speed=layoutAdd->getSpeed();
-    unsigned int peso=layoutAdd->getPeso();
+    if(nome_trimmed=="") throw new BoatException("Dai il nome del modello di barca");
+    std::string cantiere=layoutIns->getCantiere();
+    unsigned int speed=layoutIns->getSpeed();
+    unsigned int peso=layoutIns->getPeso();
+    unsigned int lunghezza=layoutIns->getLunghezza();
     if(x==0){
-        unsigned int temperaturaS=layoutAdd->getTemperaturaS();
-        std::string carburanteS=layoutAdd->getCarburanteS();
-        Steam* train=new Steam(nome, costruttore, speed, peso, temperaturaS, carburanteS);
-        modello->push_end(train);
+        unsigned int numMotori=layoutIns->getNumMotori();
+        unsigned int potMotore=layoutIns->getPotenzaMotore();
+        std::string tipoMotore=layoutIns->getTipoMotore();
+        float consumoT=layoutIns->getConsumoTermico();
+        unsigned int capSerbatoi=layoutIns->getCapSerbatoi();
+        std::string tipoCarb=layoutIns->getTipoCarburante();
+        Termico* boat=new Termico(nome, cantiere, peso, speed, lunghezza, numMotori, potMotore, tipoMotore, consumoT, capSerbatoi, tipoCarb);
+        modello->push_end(boat);
     }else if(x==1){
-        double efficenzaE=layoutAdd->getEfficenzaE();
-        if(efficenzaE<0 || efficenzaE>1){
-            QMessageBox::warning(this,"Nieva Trains","Efficenza dev'essere compresa tra 0 e 1.\nVerra' settata a 0.5 e potrà essere modificata");
-            efficenzaE=0.5;
-        }
-        bool trasmissione=layoutAdd->getTrasmissione();
-        Electric* train=new Electric(nome, costruttore, peso, speed, trasmissione, efficenzaE);
-        modello->push_end(train);
+        unsigned int numMotori=layoutIns->getNumMotori();
+        unsigned int potMotore=layoutIns->getPotenzaMotore();
+        std::string tipoMotore=layoutIns->getTipoMotore();
+        float consumoE=layoutIns->getConsumoElettrico();
+        unsigned int capBatteria=layoutIns->getCapBatteria();
+        std::string tipoBatt=layoutIns->getTipoBatteria();
+        Elettrico* boat=new Elettrico(nome, cantiere, peso, speed, lunghezza, numMotori, potMotore, tipoMotore, consumoE, capBatteria, tipoBatt);
+        modello->push_end(boat);
     }else if(x==2){
-        std::string motoreIC=layoutAdd->getMotoreIC();
-        unsigned int potenzaIC=layoutAdd->getPotenzaIC();
-        Internal_Combustion* train= new Internal_Combustion(nome, costruttore, peso, speed, potenzaIC, motoreIC);
-        modello->push_end(train);
-    }else if(x==3){
-        bool tecnologia=layoutAdd->getTecnologia();
-        Maglev* train= new Maglev(nome, costruttore, peso, speed, tecnologia);
-        modello->push_end(train);
-    }else{
-        double efficenzaE=layoutAdd->getEfficenzaE();
-        if(efficenzaE<0 || efficenzaE>1){
-            QMessageBox::warning(this,"Nieva Trains","Efficenza dev'essere compresa tra 0 e 1.\nVerra' settata a 0.5 e potrà essere modificata");
-            efficenzaE=0.5;
-        }
-        bool trasmissione=layoutAdd->getTrasmissione();
-        std::string motoreIC=layoutAdd->getMotoreIC();
-        unsigned int potenzaIC=layoutAdd->getPotenzaIC();
-        bool primario=layoutAdd->getPrimario();
-        Bimode* train= new Bimode(nome, costruttore, peso, speed, trasmissione, efficenzaE, potenzaIC, motoreIC, primario);
-        modello->push_end(train);
+        unsigned int numVele=layoutIns->getNumVele();
+        unsigned int potMotoreAus=layoutIns->getPotenzaMotoreAusiliario();
+        bool motoreAus=layoutIns->getMotoreAusiliario();
+        Vela* boat= new Vela(nome, cantiere, peso, speed, lunghezza, numVele, potMotoreAus, motoreAus);
+        modello->push_end(boat);
     }
-    //prende l'ultimo treno del modello e lo aggiunge alla lista
-    layout->getList()->addTrenoList(modello->getTreno(modello->numerotreni()-1),modello->numerotreni()-1);
-    layout->getList()->setCurrentRow(modello->numerotreni()-1);
+    //prende l'ultima imbarcazione del modello e la aggiunge alla lista
+    layout->getList()->addImbarcazioneList(modello->getImbarcazione(modello->numImbarcazioni()-1),modello->numImbarcazioni()-1);
+    layout->getList()->setCurrentRow(modello->numImbarcazioni()-1);
     //aggiornamento lista view
-    layoutAdd->close();
-    delete layoutAdd;
-}catch(NievaException* e){QMessageBox::warning(this,"Nieva Trains",QString::fromStdString(e->getMessage()));}
+    layoutIns->close();
+    delete layoutIns;
+} catch(BoatException* e){
+    QMessageBox::warning(this,"Marghera Boat",QString::fromStdString(e->getMessage()));
+}
 /**
- * @brief slotShowModificaTreno fa comparire la finestra di modifica del treno selezionato precompilando i valori del treno
+ * @brief slotShowModifyBoat fa comparire la finestra di modifica dell'imbarcazione selezionata precompilando i valori
  */
-void MainWindow::slotShowModificaTreno() try{
-    if(layout->estraiTrenoSelezionato()==-1)   throw new NievaException("Seleziona un treno esistente da modificare");
-    unsigned int indecs=layout->getList()->getItem()->getRealIndex();
-    Treno* TrenoDaModificare=modello->getTreno(indecs);
-    std::string tipo=TrenoDaModificare->type();
+void MainWindow::slotShowModifyBoat() try{
+    if(layout->estraiBarcaSelezionata()==-1)   throw new BoatException("Seleziona un'imbarcazione esistente da modificare");
+    unsigned int index=layout->getList()->getItem()->getRealIndex();
+    Imbarcazione* BarcaDaModificare=modello->getImbarcazione(index);
+    std::string tipo=BarcaDaModificare->tipoPropulsione();
     /*
      * Vengono usati i dynamic cast dove è necessario poichè non c'è altro modo per estrarre i campi di tipi derivati senza andare a modificare la gerarchia con
      * metodi ad hoc (si usano per questo i normali get)
      */
-    if(tipo=="Electric"){
-        layoutMod=new ModificaLayout(this,1,indecs);
-        Electric*tmp=dynamic_cast<Electric*>(TrenoDaModificare);
-        layoutMod->setEfficenzaE(tmp->getEfficenzaElettrico());
-        layoutMod->setTrasmissione(tmp->getTrasmissioneElettrico());
+    if(tipo=="Motore Termico"){
+        layoutMod=new ModifyLayout(this,0,index);
+        Termico* tmp=dynamic_cast<Termico*>(BarcaDaModificare);
+        layoutMod->setNumMotori(tmp->getNumMotori());
+        layoutMod->setPotenzaMotore(tmp->getPotenzaMotore());
+        layoutMod->setTipoMotore(tmp->getTipoMotore());
+        layoutMod->setConsumoTermico(tmp->getConsumo());
+        layoutMod->setCapSerbatoi(tmp->getCapienzaSerbatoi());
+        layoutMod->setTipoCarburante(tmp->getTipoCombustione());
     }
-    else if(tipo=="Bimode"){
-        layoutMod=new ModificaLayout(this,4,indecs);
-        Bimode*tmp=dynamic_cast<Bimode*>(TrenoDaModificare);
-        layoutMod->setPrimario(tmp->getMotorePrimario());
-        layoutMod->setPotenzaIC(tmp->getPotenzaIC());
-        layoutMod->setMotoreIC(tmp->getMotoreIC());
-        layoutMod->setEfficenzaE(tmp->getEfficenzaElettrico());
-        layoutMod->setTrasmissione(tmp->getTrasmissioneElettrico());
+    else if(tipo=="Motore Elettrico"){
+        layoutMod=new ModifyLayout(this,1,index);
+        Elettrico* tmp=dynamic_cast<Elettrico*>(BarcaDaModificare);
+        layoutMod->setNumMotori(tmp->getNumMotori());
+        layoutMod->setPotenzaMotore(tmp->getPotenzaMotore());
+        layoutMod->setTipoMotore(tmp->getTipoMotore());
+        layoutMod->setConsumoElettrico(tmp->getConsumo());
+        layoutMod->setCapBatteria(tmp->getCapienzaBatteria());
+        layoutMod->setTipoCarburante(tmp->getTipoBatteria());
     }
-    else if(tipo=="Steam"){
-        layoutMod=new ModificaLayout(this,0,indecs);
-        Steam*tmp=static_cast<Steam*>(TrenoDaModificare);
-        layoutMod->setTemperaturaS(tmp->getTemperaturaOperativa());
-        layoutMod->setCarburanteS(tmp->getCarburanteSteam());
-    }
-    else if (tipo=="Internal_Combustion"){
-        layoutMod=new ModificaLayout(this,2,indecs);
-        Internal_Combustion*tmp=dynamic_cast<Internal_Combustion*>(TrenoDaModificare);
-        layoutMod->setPotenzaIC(tmp->getPotenzaIC());
-        layoutMod->setMotoreIC(tmp->getMotoreIC());
-    }
-    else if (tipo=="Maglev"){
-        layoutMod=new ModificaLayout(this,3,indecs);
-        Maglev*tmp=static_cast<Maglev*>(TrenoDaModificare);
-        layoutMod->setTecnologia(tmp->getTecnologia());
+    else if(tipo=="Vela"){
+        layoutMod=new ModifyLayout(this,2,index);
+        Vela* tmp=dynamic_cast<Vela*>(BarcaDaModificare);
+        layoutMod->setNumVele(tmp->getNumVele());
+        layoutMod->setMotoreAusiliario(tmp->getMotoreAusiliario());
+        layoutMod->setPotenzaMotoreAusiliario(tmp->getPotenzaMotoreAusiliario());
     }
     else{
-        throw new NievaException("Tipo del treno sbagliato");
+        throw new BoatException("Tipo di propulsione sbagliato");
     }
-    layoutMod->setNome(TrenoDaModificare->getNome());
-    layoutMod->setCostruttore(TrenoDaModificare->getCostruttore());
-    layoutMod->setPeso(TrenoDaModificare->getPeso());
-    layoutMod->setSpeed(TrenoDaModificare->getSpeed());
+    layoutMod->setNome(BarcaDaModificare->getNome());
+    layoutMod->setCantiere(BarcaDaModificare->getCantiere());
+    layoutMod->setPeso(BarcaDaModificare->getPeso());
+    layoutMod->setSpeed(BarcaDaModificare->getVelocita());
     layoutMod->resize(250,350);
     layoutMod->exec();
-}catch(NievaException* e){
-    QMessageBox::warning(this,"Nieva Trains",QString::fromStdString(e->getMessage()));
+}catch(BoatException* e){
+    QMessageBox::warning(this,"Marghera Boat",QString::fromStdString(e->getMessage()));
 }
 /**
- * @brief slotModificaTreno crea un nuovo treno con le informazioni date dall'utente e lo inserisce nel modello al posto del precedente
+ * @brief slotModifyBoat crea una nuova imbarcazione con le informazioni date dall'utente e la inserisce nel modello al posto della precedente
  */
-void MainWindow::slotModificaTreno(){
+void MainWindow::slotModifyBoat(){
     unsigned int x=layoutMod->getInd(); //è l'indice reale
     unsigned int tip=layoutMod->getTipo();
-    //in base al tipo identificato da tip creo un nuovo treno e lo inserisco nel modello
+    //in base al tipo identificato da tip creo una nuova imbarcazione e la inserisco nel modello
     std::string nomeNew=layoutMod->getNome();
-    std::string costruttoreNew=layoutMod->getCostruttore();
+    std::string cantiereNew=layoutMod->getCantiere();
     unsigned int speedNew=layoutMod->getSpeed();
     unsigned int pesoNew=layoutMod->getPeso();
+    float lunghezzaNew=layoutMod->getLunghezza();
     if(tip==0){
-        unsigned int temperaturaSNew=layoutMod->getTemperaturaS();
-        std::string carburanteSNew=layoutMod->getCarburanteS();
-        Steam* trenoDaSostituire=new Steam(nomeNew, costruttoreNew, speedNew, pesoNew, temperaturaSNew, carburanteSNew);
-        modello->sostituisci(trenoDaSostituire, x);
+        unsigned int numMotoriNew=layoutMod->getNumMotori();
+        unsigned int potMotoreNew=layoutMod->getPotenzaMotore();
+        std::string tipoMotoreNew=layoutMod->getTipoMotore();
+        float consumoTNew=layoutMod->getConsumoTermico();
+        unsigned int capSerbatoiNew=layoutMod->getCapSerbatoi();
+        std::string tipoCarbNew=layoutMod->getTipoCarburante();
+        Termico* barcaDaSostituire=new Termico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, consumoTNew, capSerbatoiNew, tipoCarbNew);
+        //modello->sostituisci(barcaDaSostituire, x);
     }else if(tip==1){
-        double efficenzaENew=layoutMod->getEfficenzaE();
-        if(efficenzaENew<0 || efficenzaENew>1)    {
-            QMessageBox::warning(this,"Nieva Trains","Efficenza dev'essere compresa tra 0 e 1.\nVerra' settata a 0.5 e potrà essere modificata");
-            efficenzaENew=0.5;
-        }
-        bool trasmissioneNew=layoutMod->getTrasmissione();
-        Electric* trenoDaSostituire=new Electric(nomeNew, costruttoreNew, speedNew, pesoNew, trasmissioneNew, efficenzaENew);
-        modello->sostituisci(trenoDaSostituire, x);
+        unsigned int numMotoriNew=layoutMod->getNumMotori();
+        unsigned int potMotoreNew=layoutMod->getPotenzaMotore();
+        std::string tipoMotoreNew=layoutMod->getTipoMotore();
+        float consumoENew=layoutMod->getConsumoElettrico();
+        unsigned int capBatteriaNew=layoutMod->getCapBatteria();
+        std::string tipoBattNew=layoutMod->getTipoBatteria();
+        Elettrico* barcaDaSostituire=new Elettrico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, consumoENew, capBatteriaNew, tipoBattNew);
+        //modello->sostituisci(barcaDaSostituire, x);
     }else if(tip==2){
-        std::string motoreICNew=layoutMod->getMotoreIC();
-        unsigned int potenzaICNew=layoutMod->getPotenzaIC();
-        Internal_Combustion* trenoDaSostituire=new Internal_Combustion(nomeNew, costruttoreNew, speedNew, pesoNew, potenzaICNew, motoreICNew);
-        modello->sostituisci(trenoDaSostituire, x);
-    }else if(tip==3){
-        bool tecnologiaNew=layoutMod->getTecnologia();
-        Maglev* trenoDaSostituire=new Maglev(nomeNew, costruttoreNew, speedNew, pesoNew, tecnologiaNew);
-        modello->sostituisci(trenoDaSostituire, x);
-    }else if(tip==4){
-        std::string motoreICNew=layoutMod->getMotoreIC();
-        unsigned int potenzaICNew=layoutMod->getPotenzaIC();
-        double efficenzaENew=layoutMod->getEfficenzaE();
-        if(efficenzaENew<0 || efficenzaENew>1){
-            QMessageBox::warning(this,"Nieva Trains","Efficenza dev'essere compresa tra 0 e 1.\nVerra' settata a 0.5 e potrà essere modificata");
-            efficenzaENew=0.5;
-        }
-        bool trasmissioneNew=layoutMod->getTrasmissione();
-        bool primarioNew=layoutMod->getPrimario();
-        Bimode* trenoDaSostituire=new Bimode(nomeNew, costruttoreNew, speedNew, pesoNew, trasmissioneNew, efficenzaENew, potenzaICNew, motoreICNew, primarioNew);
-        modello->sostituisci(trenoDaSostituire, x);
+        unsigned int numVeleNew=layoutMod->getNumMotori();
+        unsigned int potMotoreAusNew=layoutMod->getPotenzaMotoreAusiliario();
+        std::string motoreAusNew=layoutMod->getMotoreAusiliario();
+        Vela* barcaDaSostituire=new Vela(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numVeleNew, potMotoreAusNew, motoreAusNew);
+        //modello->sostituisci(barcaDaSostituire, x);
     }
     //refresh lista
     refreshList();
@@ -260,7 +237,7 @@ void MainWindow::slotModificaTreno(){
     delete layoutMod;
 }
 /**
- * @brief slotCerca filtra la lista dei treni a seconda del parametro e dell'ambito scelti dall'utente
+ * @brief slotCerca filtra la lista delle imbarcazioni a seconda del parametro scelto dall'utente
  */
 void MainWindow::slotCerca(){
     try{
@@ -271,7 +248,7 @@ void MainWindow::slotCerca(){
         searchNome(parametro);
         break;
     case 1:
-        searchCostruttore(parametro);
+        searchCantiere(parametro);
         break;
     case 2:
     if(parametro.substr(0,1)=="<")
@@ -283,74 +260,107 @@ void MainWindow::slotCerca(){
     break;
     case 3:
     if(parametro.substr(0,1)=="<")
-        searchVelocita(std::stoi(parametro.substr(1)), true);
+        searchVelocita(std::stoi(parametro.substr(1)), false);
     else if(parametro.substr(0,1)==">")
-        searchVelocita(std::stoi(parametro=parametro.substr(1)), false);
+        searchVelocita(std::stoi(parametro=parametro.substr(1)), true);
     else
         searchVelocita(std::stoi(parametro), false);
     break;
     case 4:
-        searchMotoreIC(parametro);
+        if(parametro.substr(0,1)=="<")
+            searchLunghezza(std::stoi(parametro.substr(1)), false);
+        else if(parametro.substr(0,1)==">")
+            searchLunghezza(std::stoi(parametro=parametro.substr(1)), true);
+        else
+            searchLunghezza(std::stoi(parametro), false);
         break;
     case 5:
            if(parametro.substr(0,1)=="<")
-               searchPotenzaIC(std::atof(parametro.substr(1).c_str()), true);
+               searchNumMotori(std::atof(parametro.substr(1).c_str()), true);
            else if(parametro.substr(0,1)==">")
-               searchPotenzaIC(std::atof(parametro.substr(1).c_str()), false);
+               searchNumMotori(std::atof(parametro.substr(1).c_str()), false);
            else
-               searchPotenzaIC(std::atof(parametro.substr(0).c_str()), false);
+               searchNumMotori(std::atof(parametro.substr(0).c_str()), false);
            break;
     case 6:
-        searchTrasmissioneElettrico(parametro);
+        if(parametro.substr(0,1)=="<")
+            searchPotenzaMotori(std::atof(parametro.substr(1).c_str()), true);
+        else if(parametro.substr(0,1)==">")
+            searchPotenzaMotori(std::atof(parametro.substr(1).c_str()), false);
+        else
+            searchPotenzaMotori(std::atof(parametro.substr(0).c_str()), false);
         break;
     case 7:
-           if(parametro.substr(0,1)=="<")
-               searchEfficenzaElettrico(std::atof(parametro.substr(1).c_str()), true);
-           else if(parametro.substr(0,1)==">")
-               searchEfficenzaElettrico(std::atof(parametro.substr(1).c_str()), false);
-           else
-               searchEfficenzaElettrico(std::atof(parametro.substr(0).c_str()), false);
-           break;
+        searchTipoMotore(parametro);
+        break;
     case 8:
            if(parametro.substr(0,1)=="<")
-               searchTemperaturaVapore(std::atof(parametro.substr(1).c_str()), true);
+               searchConsumoTermico(std::atof(parametro.substr(1).c_str()), true);
            else if(parametro.substr(0,1)==">")
-               searchTemperaturaVapore(std::atof(parametro.substr(1).c_str()), false);
+               searchConsumoTermico(std::atof(parametro.substr(1).c_str()), false);
            else{
-               searchTemperaturaVapore(std::atof(parametro.substr(0).c_str()), false);}
+               searchConsumoTermico(std::atof(parametro.substr(0).c_str()), false);}
            break;
     case 9:
-        searchCarburanteVapore(parametro);
+        if(parametro.substr(0,1)=="<")
+            searchCapienzaSerbatoi(std::atof(parametro.substr(1).c_str()), true);
+        else if(parametro.substr(0,1)==">")
+            searchCapienzaSerbatoi(std::atof(parametro.substr(1).c_str()), false);
+        else{
+            searchCapienzaSerbatoi(std::atof(parametro.substr(0).c_str()), false);}
         break;
     case 10:
-        searchTecnologiaMaglev(parametro);
+        searchTipoCarburante(parametro);
         break;
     case 11:
-        searchMotorePrimario(parametro);
+        if(parametro.substr(0,1)=="<")
+            searchConsumoElettrico(std::atof(parametro.substr(1).c_str()), true);
+        else if(parametro.substr(0,1)==">")
+            searchConsumoElettrico(std::atof(parametro.substr(1).c_str()), false);
+        else{
+            searchConsumoElettrico(std::atof(parametro.substr(0).c_str()), false);}
         break;
-
+    case 12:
+        if(parametro.substr(0,1)=="<")
+            searchCapienzaBatteria(std::atof(parametro.substr(1).c_str()), true);
+        else if(parametro.substr(0,1)==">")
+            searchCapienzaBatteria(std::atof(parametro.substr(1).c_str()), false);
+        else{
+            searchCapienzaBatteria(std::atof(parametro.substr(0).c_str()), false);}
+        break;
+    case 13:
+        searchTipoBatteria(parametro);
+        break;
+    case 14:
+        if(parametro.substr(0,1)=="<")
+            searchNumVele(std::atof(parametro.substr(1).c_str()), true);
+        else if(parametro.substr(0,1)==">")
+            searchNumVele(std::atof(parametro.substr(1).c_str()), false);
+        else
+            searchNumVele(std::atof(parametro.substr(0).c_str()), false);
+        break;
     }
     }
-    catch(NievaException* e){
+    catch(BoatException* e){
         if(e->getMessage()=="ricerca sbagliata"){
             for(int i=0;i<layout->getList()->count();)   layout->getList()->erase(i);
         }
     }
     catch(...){
-        QMessageBox::warning(this,"Nieva Trains","Qualcosa è andato storto, controlla i parametri di ricerca e riprova");
+        QMessageBox::warning(this,"Marghera Boat","Qualcosa è andato storto, controlla i parametri di ricerca e riprova");
     }
 
 }
 /**
- * @brief slotResetSearch annulla il filtraggio applicato alla lista dei treni se presente
+ * @brief slotResetSearch annulla il filtraggio applicato alla lista delle imbarcazioni se presente
  */
 void MainWindow::slotResetSearch(){
     refreshList();
 }
-using std::cout;
+
 /**
- * @brief searchNome filtra la lista dei treni mantenendo solo i treni aventi il nome simile al parametro inserito dall'utente
- * @param n= stringa inserita dall'utente
+ * @brief searchNome filtra la lista delle imbarcazioni mantenendo solo le barche aventi il nome simile al parametro inserito dall'utente
+ * @param n = stringa inserita dall'utente
  */
 void MainWindow::searchNome(std::string n)
 {
@@ -370,19 +380,19 @@ void MainWindow::searchNome(std::string n)
     }
 }
 /**
- * @brief searchCostruttore filtra la lista dei treni mantenendo solo i treni aventi il costruttore simile al parametro inserito dall'utente
- * @param n= stringa inserita dall'utente
+ * @brief searchCantiere filtra la lista delle imbarcazioni mantenendo solo le barche aventi il cantiere di costruzione simile al parametro inserito dall'utente
+ * @param n = stringa inserita dall'utente
  */
 void MainWindow::searchCostruttore(std::string n)
 {
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        std::string costruttore=layout->getList()->getItemByIndex(i)->getCostruttore();
+        std::string costruttore=layout->getList()->getItemByIndex(i)->getCantiere();
         transform(costruttore.begin(), costruttore.end(), costruttore.begin(),
             [](unsigned char c){ return toupper(c); });
         transform(n.begin(), n.end(), n.begin(),
             [](unsigned char c){ return toupper(c); });
-        if(n!=layout->getList()->getItemByIndex(i)->getCostruttore()){
+        if(n!=layout->getList()->getItemByIndex(i)->getCantiere()){
             if(costruttore.find(n)==std::string::npos){
                 layout->getList()->erase(i);
                 --i; --lun;
@@ -390,63 +400,11 @@ void MainWindow::searchCostruttore(std::string n)
         }
     }
 }
+
 /**
- * @brief searchMotoreIC filtra la lista dei treni mantenendo solo i treni a combustione interna aventi il nome del motore simile al parametro inserito dall'utente
- * @param n= stringa inserita dall'utente
- */
-void MainWindow::searchMotoreIC(std::string n){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(dynamic_cast<Internal_Combustion*>(layout->getList()->getItemByIndex(i))){
-            Internal_Combustion* t=dynamic_cast<Internal_Combustion*>(layout->getList()->getItemByIndex(i));
-            std::string motore=t->getMotoreIC();
-            transform(motore.begin(), motore.end(), motore.begin(),
-                [](unsigned char c){ return toupper(c); });
-            transform(n.begin(), n.end(), n.begin(),
-                [](unsigned char c){ return toupper(c); });
-            if(n!=motore){
-                if(motore.find(n)==std::string::npos){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }
-        }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-        }
-    }
-}
-/**
- * @brief searchCarburanteVapore filtra la lista dei treni mantenendo solo i treni a vapore aventi il carburante simile al parametro inserito dall'utente
- * @param n= stringa inserita dall'utente
- */
-void MainWindow::searchCarburanteVapore(std::string n){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->type()=="Steam"){
-            Steam* t=static_cast<Steam*>(layout->getList()->getItemByIndex(i));
-            std::string fuel=t->getCarburanteSteam();
-            transform(fuel.begin(), fuel.end(), fuel.begin(),
-                [](unsigned char c){ return toupper(c); });
-            transform(n.begin(), n.end(), n.begin(),
-                [](unsigned char c){ return toupper(c); });
-            if(n!=fuel){
-                if(fuel.find(n)==std::string::npos){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                };
-            }
-        }
-        else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-    }
-}
-/**
- * @brief searchPeso filtra la lista dei treni mantenendo solo i treni aventi il peso maggiore o minore del parametro inserito dall'utente
- * @param n= peso inserito dall'utente
- * @param b= scelta se selezionare solo i maggiori o solo i minori
+ * @brief searchPeso filtra la lista delle imbarcazioni mantenendo solo quelle aventi il peso maggiore o minore del parametro inserito dall'utente
+ * @param n = peso inserito dall'utente
+ * @param b = scelta se selezionare solo i maggiori o solo i minori
  */
 void MainWindow::searchPeso(unsigned int n, bool b){
     unsigned int lun=layout->getList()->count();
@@ -463,18 +421,18 @@ void MainWindow::searchPeso(unsigned int n, bool b){
     }
 }
 /**
- * @brief searchVelocita filtra la lista dei treni mantenendo solo i treni aventi la velocità maggiore o minore del parametro inserito dall'utente
- * @param n= velocita inserito dall'utente
- * @param b= scelta se selezionare solo i maggiori o solo i minori
+ * @brief searchVelocita filtra la lista dlle imbarcazioni mantenendo solo quelle aventi la velocità maggiore o minore del parametro inserito dall'utente
+ * @param n = velocita inserito dall'utente
+ * @param b = scelta se selezionare solo i maggiori o solo i minori
  */
 void MainWindow::searchVelocita(unsigned int n, bool b){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(b && layout->getList()->getItemByIndex(i)->getSpeed()>=n){
+        if(b && layout->getList()->getItemByIndex(i)->getVelocita()>=n){
             //maggiore
             layout->getList()->erase(i);
             --i; --lun;
-        }else if(!b && layout->getList()->getItemByIndex(i)->getSpeed()<n){
+        }else if(!b && layout->getList()->getItemByIndex(i)->getVelocita()<n){
             //minore
             layout->getList()->erase(i);
             --i; --lun;
@@ -482,19 +440,141 @@ void MainWindow::searchVelocita(unsigned int n, bool b){
     }
 }
 /**
- * @brief searchPotenzaIC filtra la lista dei treni mantenendo sol i treni a combustione interna aventi la potenza specifica del motore diesel maggiore o minore del parametro inserito dall'utente
- * @param n= potenza specifica inserita dall'utente
- * @param b= scelta se selezionare solo i maggiori o solo i minori
+ * @brief searchLunghezza filtra la lista dlle imbarcazioni mantenendo solo quelle aventi la lunghezza maggiore o minore del parametro inserito dall'utente
+ * @param n = lunghezza inserita dall'utente
+ * @param b = scelta se selezionare solo i maggiori o solo i minori
  */
-void MainWindow::searchPotenzaIC(unsigned int n, bool b){
+void MainWindow::searchLunghezza(unsigned int n, bool b){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->type()=="Internal_Combustion" || layout->getList()->getItemByIndex(i)->type()=="Bimode"){
-            if(Internal_Combustion* t=dynamic_cast<Internal_Combustion*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getPotenzaIC()){
+        if(b && layout->getList()->getItemByIndex(i)->getLunghezza()>=n){
+            //maggiore
+            layout->getList()->erase(i);
+            --i; --lun;
+        }else if(!b && layout->getList()->getItemByIndex(i)->getLunghezza()<n){
+            //minore
+            layout->getList()->erase(i);
+            --i; --lun;
+        }
+    }
+}
+
+/**
+ * @brief searchNumMotori filtra la lista delle imbarcazioni mantenendo solo quelle aventi il numero di motori maggiore o minore del parametro inserito dall'utente
+ * @param n = numero di motori inserito dall'utente
+ * @param b = scelta se selezionare solo i maggiori o solo i minori
+ */
+void MainWindow::searchNumMotori(unsigned int n, bool b){
+    unsigned int lun=layout->getList()->count();
+    for(unsigned int i=0; i<lun; ++i){
+            if(Motore* t=dynamic_cast<Motore*>(layout->getList()->getItemByIndex(i))){
+                if(b && n<t->getNumMotori()){
                     layout->getList()->erase(i);
                     --i; --lun;
-                }else if(!b && n>=t->getPotenzaIC()){
+                }else if(!b && n>=t->getNumMotori()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }
+            }else{
+                layout->getList()->erase(i);
+                --i; --lun;
+            }
+        }
+}
+
+/**
+ * @brief searchPotenzaMotori filtra la lista delle imbarcazioni mantenendo solo quelle aventi la potenza del singolo motore maggiore o minore del parametro inserito dall'utente
+ * @param n = potenza singolo motore inserito dall'utente
+ * @param b = scelta se selezionare solo i maggiori o solo i minori
+ */
+void MainWindow::searchPotenzaMotori(unsigned int n, bool b){
+    unsigned int lun=layout->getList()->count();
+    for(unsigned int i=0; i<lun; ++i){
+            if(Motore* t=dynamic_cast<Motore*>(layout->getList()->getItemByIndex(i))){
+                if(b && n<t->getPotenzaMotore()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }else if(!b && n>=t->getPotenzaMotore()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }
+            }else{
+                layout->getList()->erase(i);
+                --i; --lun;
+            }
+        }
+}
+
+/**
+ * @brief searchConsumoTermico filtra la lista delle imbarcazioni mantenendo solo quelle a combustione termica aventi i consumi del motore maggiore o minore del parametro inserito dall'utente
+ * @param n= consumo carburante inserita dall'utente
+ * @param b= scelta se selezionare solo i maggiori o solo i minori
+ */
+void MainWindow::searchConsumoTermico(unsigned int n, bool b){
+    unsigned int lun=layout->getList()->count();
+    for(unsigned int i=0; i<lun; ++i){
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
+            if(Termico* t=dynamic_cast<Termico*>(layout->getList()->getItemByIndex(i))){
+                if(b && n<t->getConsumo()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }else if(!b && n>=t->getConsumo()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }
+            }else{
+                layout->getList()->erase(i);
+                --i; --lun;
+            }
+        }else{
+            layout->getList()->erase(i);
+            --i; --lun;
+        }
+    }
+}
+
+/**
+ * @brief searchConsumoElettrico filtra la lista delle imbarcazioni mantenendo solo quelle a combustione elettrica aventi i consumi della batteria maggiore o minore del parametro inserito dall'utente
+ * @param n = consumo batteria inserita dall'utente
+ * @param b = scelta se selezionare solo i maggiori o solo i minori
+ */
+void MainWindow::searchConsumoElettrico(unsigned int n, bool b){
+    unsigned int lun=layout->getList()->count();
+    for(unsigned int i=0; i<lun; ++i){
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
+            if(Elettrico* t=dynamic_cast<Elettrico*>(layout->getList()->getItemByIndex(i))){
+                if(b && n<t->getConsumo()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }else if(!b && n>=t->getConsumo()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }
+            }else{
+                layout->getList()->erase(i);
+                --i; --lun;
+            }
+        }else{
+            layout->getList()->erase(i);
+            --i; --lun;
+        }
+    }
+}
+
+/**
+ * @brief searchCapienzaSerbatoi filtra la lista delle imbarcazioni mantenendo solo quelle a motore termico aventi la capieza dei serbatoi maggiore o minore del parametro inserito dall'utente
+ * @param n = capienza in litri inserita dall'utente
+ * @param b= scelta se selezionare solo i maggiori o solo i minori
+ */
+void MainWindow::searchCapienzaSerbatoi(unsigned int n, bool b){
+    unsigned int lun=layout->getList()->count();
+    for(unsigned int i=0; i<lun; ++i){
+        if(layout->getList()->getItemByIndex(i)->type()=="Motore Termico"){
+            if(Termico* t=static_cast<Termico*>(layout->getList()->getItemByIndex(i))){
+                if(b && n<t->getCapienzaSerbatoi()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }else if(!b && n>=t->getCapienzaSerbatoi()){
                     layout->getList()->erase(i);
                     --i; --lun;
                 }
@@ -509,19 +589,19 @@ void MainWindow::searchPotenzaIC(unsigned int n, bool b){
     }
 }
 /**
- * @brief searchTemperaturaVapore filtra la lista dei treni mantenendo sol i treni a vapore aventi la temperatura operativa del motore a vapore maggiore o minore del parametro inserito dall'utente
- * @param n= temperatura in celsius inserita dall'utente
- * @param b= scelta se selezionare solo i maggiori o solo i minori
+ * @brief searchCapienzaBatteria filtra la lista delle imbarcazioni mantenendo solo quelle a motore elettrico aventi la capieza delle batterie maggiore o minore del parametro inserito dall'utente
+ * @param n = capienza in KW delle batterie inserita dall'utente
+ * @param b = scelta se selezionare solo i maggiori o solo i minori
  */
-void MainWindow::searchTemperaturaVapore(unsigned int n, bool b){
+void MainWindow::searchCapienzaBatteria(unsigned int n, bool b){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->type()=="Steam"){
-            if(Steam* t=static_cast<Steam*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getTemperaturaOperativa()){
+        if(layout->getList()->getItemByIndex(i)->type()=="Motore Elettrico"){
+            if(Elettrico* t=static_cast<Elettrico*>(layout->getList()->getItemByIndex(i))){
+                if(b && n<t->getCapienzaBatteria()){
                     layout->getList()->erase(i);
                     --i; --lun;
-                }else if(!b && n>=t->getTemperaturaOperativa()){
+                }else if(!b && n>=t->getCapienzaBatteria()){
                     layout->getList()->erase(i);
                     --i; --lun;
                 }
@@ -535,20 +615,21 @@ void MainWindow::searchTemperaturaVapore(unsigned int n, bool b){
         }
     }
 }
+
 /**
- * @brief searchEfficenzaElettrico filtra la lista dei treni mantenendo sol i treni elettrici aventi l'efficenza del motore elettrico maggiore o minore del parametro inserito dall'utente
- * @param n= efficenza inserita dall'utente
+ * @brief searchNumVele filtra la lista delle imbarcazioni mantenendo solo quelle a vela aventi il numero di vele maggiore o minore del parametro inserito dall'utente
+ * @param n = numero di vele inserite dall'utente
  * @param b= scelta se selezionare solo i maggiori o solo i minori
  */
-void MainWindow::searchEfficenzaElettrico(double n, bool b){
+void MainWindow::searchNumVele(unsigned int n, bool b){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->type()=="Electric" || layout->getList()->getItemByIndex(i)->type()=="Bimode"){
-            if(Electric* t=dynamic_cast<Electric*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getEfficenzaElettrico()){
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Vela"){
+            if(Vela* t=dynamic_cast<Vela*>(layout->getList()->getItemByIndex(i))){
+                if(b && n<t->getNumVele()){
                     layout->getList()->erase(i);
                     --i; --lun;
-                }else if(!b && n>=t->getEfficenzaElettrico()){
+                }else if(!b && n>=t->getNumVele()){
                     layout->getList()->erase(i);
                     --i; --lun;
                 }
@@ -556,64 +637,86 @@ void MainWindow::searchEfficenzaElettrico(double n, bool b){
                 layout->getList()->erase(i);
                 --i; --lun;
             }
-        }
-        else{
+        }else{
             layout->getList()->erase(i);
             --i; --lun;
         }
     }
 }
 
-
-
 /**
- * @brief searchTrasmissioneElettrico filtra la lista dei treni mantenendo sol i treni elettrici aventi il tipo di trasmissione uguale al parametro inserito dall'utente
- * @param n= stringa inserita dall'utente
+ * @brief searchPotenzaMotoreAusi filtra la lista delle imbarcazioni mantenendo solo quelle a vela aventi la potenza del motore ausiliario maggiore o minore del parametro inserito dall'utente
+ * @param n = potenza motore ausiliario inserito dall'utente
+ * @param b= scelta se selezionare solo i maggiori o solo i minori
  */
-void MainWindow::searchTrasmissioneElettrico(std::string n){
+void MainWindow::searchPotenzaMotoreAusi(unsigned int n, bool b){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->type()=="Electric" || layout->getList()->getItemByIndex(i)->type()=="Bimode"){
-            if(Electric* t=dynamic_cast<Electric*>(layout->getList()->getItemByIndex(i))){
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Vela"){
+            if(Vela* t=dynamic_cast<Vela*>(layout->getList()->getItemByIndex(i))){
+                if(b && n<t->getPotenzaMotoreAusiliario()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }else if(!b && n>=t->getPotenzaMotoreAusiliario()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }
+            }else{
+                layout->getList()->erase(i);
+                --i; --lun;
+            }
+        }else{
+            layout->getList()->erase(i);
+            --i; --lun;
+        }
+    }
+}
+
+/**
+ * @brief searchTipoMotore filtra la lista delle imbarcazioni mantenendo solo quelle a motore aventi il tipo di motore uguale al parametro inserito dall'utente
+ * @param n = stringa inserita dall'utente
+ */
+void MainWindow::searchTipoMotore(std::string n){
+    unsigned int lun=layout->getList()->count();
+    for(unsigned int i=0; i<lun; ++i){
+            if(Motore* t=dynamic_cast<Motore*>(layout->getList()->getItemByIndex(i))){
                 bool  test=true;
                 transform(n.begin(), n.end(), n.begin(),
                     [](unsigned char c){ return tolower(c); });
-                if(n=="third rail") test=true;
-                else if(n=="overhead line")    test=false;
+                if(n=="Entrobordo") test=true;
+                else if(n=="Fuoribordo") test=true;
+                else if(n=="Entrofuoribordo") test=true;
                 //eccezione ?
-                else throw new NievaException("ricerca sbagliata");
-                if(test!=t->getTrasmissioneElettrico()){
+                else throw new BoatException("ricerca sbagliata");
+                if(test!=t->getTipoMotore()){
                         layout->getList()->erase(i);
                         --i; --lun;
                 }
-            }                else{
+            } else{
                 layout->getList()->erase(i);
                 --i; --lun;
             }
-        }else{
-            layout->getList()->erase(i);
-            --i; --lun;
         }
-    }
+
 }
+
 /**
- * @brief searchMotorePrimario filtra la lista dei treni mantenendo sol i treni Bimode aventi il motore primario uguale al parametro inserito dall'utente
- * @param n= stringa inserita dall'utente
+ * @brief searchTipoCarburante filtra la lista delle imbarcazioni mantenendo solo quelle a motore termico aventi il tipo di carburante uguale al parametro inserito dall'utente
+ * @param n = stringa inserita dall'utente
  */
-void MainWindow::searchMotorePrimario(std::string n){
+void MainWindow::searchTipoCarburante(std::string n){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->type()=="Bimode"){
-            Bimode* t=dynamic_cast<Bimode*>(layout->getList()->getItemByIndex(i));
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
+            Termico* t=dynamic_cast<Termico*>(layout->getList()->getItemByIndex(i));
             if(t){
                 transform(n.begin(), n.end(), n.begin(),
                     [](unsigned char c){ return tolower(c); });
                 bool test=true;
-                if(n=="internal combustion") test=false;
-                else if(n=="electric")    test=true;
-                //eccezione ?
-                else throw new NievaException("ricerca sbagliata");
-                if(test!=t->getMotorePrimario()){
+                if(n=="diesel") test=false;
+                else if(n=="benzina")    test=true;
+                else throw new BoatException("ricerca sbagliata");
+                if(test!=t->getTipoCombustione()){
                     layout->getList()->erase(i);
                     --i; --lun;
                 }
@@ -626,26 +729,26 @@ void MainWindow::searchMotorePrimario(std::string n){
             layout->getList()->erase(i);
             --i; --lun;
         }
-    }
+        }
+
 }
 /**
- * @brief searchTecnologiaMaglev filtra la lista dei treni mantenendo sol i treni Maglev utilizzanti la tecnologia uguale al parametro inserito dall'utente
- * @param n= stringa inserita dall'utente
+ * @brief searchTipoBatteria filtra la lista delle imbarcazioni mantenendo solo quelle a motore elettrico aventi il tipo di batterie uguale al parametro inserito dall'utente
+ * @param n = stringa inserita dall'utente
  */
-void MainWindow::searchTecnologiaMaglev(std::string n){
+void MainWindow::searchTipoCarburante(std::string n){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->type()=="Maglev"){
-            Maglev* t=static_cast<Maglev*>(layout->getList()->getItemByIndex(i));
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
+            Elettrico* t=dynamic_cast<Elettrico*>(layout->getList()->getItemByIndex(i));
             if(t){
                 transform(n.begin(), n.end(), n.begin(),
-                    [](unsigned char c){ return toupper(c); });
+                    [](unsigned char c){ return tolower(c); });
                 bool test=true;
-                if(n=="EDS") test=true;
-                else if(n=="EMS")    test=false;
-                //eccezione ?
-                else throw new NievaException("ricerca sbagliata");
-                if(test!=t->getTecnologia()){
+                if(n=="piombo") test=false;
+                else if(n=="litio")    test=true;
+                else throw new BoatException("ricerca sbagliata");
+                if(test!=t->getTipoBatteria()){
                     layout->getList()->erase(i);
                     --i; --lun;
                 }
@@ -658,40 +761,131 @@ void MainWindow::searchTecnologiaMaglev(std::string n){
             layout->getList()->erase(i);
             --i; --lun;
         }
-    }
+        }
+
 }
 /**
- * @brief slotKmPercorribili mostra una finestra pop up contenente i km percorribili dal treno selezionato nella lista dei treni con le unità di carburante indicate nell'apposita barra dall'utente.
- * Nel caso un treno non utilizzi carburante come per esempio i Maglev, sarà bloccato a 0
+ * @brief searchMotoreAusi filtra la lista delle imbarcazioni mantenendo solo quelle a vela aventi il motore ausiliario uguale al parametro inserito dall'utente
+ * @param n = stringa inserita dall'utente
  */
-void MainWindow::slotKmPercorribili() try{
+void MainWindow::searchMotoreAusi(std::string n){
+    unsigned int lun=layout->getList()->count();
+    for(unsigned int i=0; i<lun; ++i){
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Vela"){
+            Vela* t=dynamic_cast<Vela*>(layout->getList()->getItemByIndex(i));
+            if(t){
+                transform(n.begin(), n.end(), n.begin(),
+                    [](unsigned char c){ return tolower(c); });
+                bool test=true;
+                if(n=="si") test=false;
+                else if(n=="no")    test=true;
+                else throw new BoatException("ricerca sbagliata");
+                if(test!=t->getMotoreAusiliario()){
+                    layout->getList()->erase(i);
+                    --i; --lun;
+                }
+            }else{
+                layout->getList()->erase(i);
+                --i; --lun;
+            }
+        }
+        else{
+            layout->getList()->erase(i);
+            --i; --lun;
+        }
+        }
+
+}
+/**
+ * @brief slotConsumi mostra una finestra pop up contenente i litri necessari per l'imbarcazione selezionata nella lista  per navigare il tempo indicato nell'apposita barra dall'utente.
+ * Nel caso un'imbarcazione non utilizzi i motori per navigare ma solamente per attraccare al porto come per esempio le barche a vela, sarà bloccato a 0
+ */
+void MainWindow::slotConsumi() try{
     if(layout->getList()->getItem()){
-        unsigned int mostra=layout->getList()->getItem()->getTreno()->kmPercorribili(layout->getKm());
-        std::string str="I km percorribili dal treno selezionato con "+std::to_string(layout->getKm())+" unità di carburante sono: "+std::to_string(mostra)+"km.";
-        QMessageBox::information(this,"Nieva Trains",QString::fromStdString(str));
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
+        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->Termico::calcoloConsumi(layout->getConsumi());
+        std::string str="I Litri necessari per navigare "+std::to_string(layout->getConsumi())+" ore sono: "+std::to_string(mostra)+" L";
+        QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
+        }
+        else if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
+            unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->Elettrico::calcoloConsumi(layout->getConsumi());
+            std::string str="I KW necessari per navigare "+std::to_string(layout->getConsumi())+" ore sono: "+std::to_string(mostra)+" KW";
+            QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
+        }
     }
 }
-catch(NievaException* e){
-    if(e->getMessage()=="Maglev")   QMessageBox::information(this,"Nieva Trains","Questa operazione non puo' essere eseguita con il treno Maglev");
+catch(BoatException* e){
+    if(e->getMessage()=="Vela")   QMessageBox::information(this,"Marghera Boat","Questa operazione non puo' essere eseguita con le barche a vela");
 }
 catch(...){}
 
 /**
- * @brief slotCarburanteNecessario mostra una finestra pop up contenente il carburante necessario per il treno selezionato nella lista dei treni per percorrere i km indicati nell'apposita barra dall'utente.
- * Nel caso un treno non utilizzi carburante come per esempio i Maglev, sarà bloccato a 0
+ * @brief slotAutonomia mostra una finestra pop up contenente il tempo di navigazione dell'imbarcazione selezionata nella lista dati i litri di carburante imbarcati indicati nell'apposita barra dall'utente.
+ * Nel caso un'imbarcazione non utilizzi i motori per navigare ma solamente per attraccare al porto come per esempio le barche a vela, sarà bloccato a 0
  */
-void MainWindow::slotCarburanteNecessario()
-    try{
+void MainWindow::slotAutonomia() try{
     if(layout->getList()->getItem()){
-        unsigned int mostra=layout->getList()->getItem()->getTreno()->carburanteNecessario(layout->getCarb());
-        std::string str="Le unità di carburante necessarie dal treno selezionato per percorrere "+std::to_string(layout->getCarb())+"km sono: "+std::to_string(mostra);
-        QMessageBox::information(this,"Nieva Trains",QString::fromStdString(str));
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
+            unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->Termico::calcoloAutonomia(layout->getAutonomia());
+            std::string str="Il tempo di autonomia della barca con "+std::to_string(layout->getConsumi())+"L di carburante imbarcato e': "+std::to_string(mostra);
+            QMessageBox::information(this,"Nieva Trains",QString::fromStdString(str));
+        }
+        else if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
+            unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->Elettrico::calcoloAutonomia(layout->getAutonomia());
+            std::string str="Il tempo di autonomia della barca con "+std::to_string(layout->getConsumi())+"KW di carica batterie e': "+std::to_string(mostra);
+            QMessageBox::information(this,"Nieva Trains",QString::fromStdString(str));
+        }
     }
+   }
+   catch(BoatException* e){
+        if(e->getMessage()=="Vela")   QMessageBox::information(this,"Marghera Boat","Questa operazione non puo' essere eseguita con le barche a vela");
+   }
+   catch(...){}
+
+
+/**
+ * @brief slotTempoNavigazione mostra una finestra pop up contenente il tempo di navigazione dell'imbarcazione selezionata nella lista per navigare le miglia indicate nell'apposita barra dall'utente.
+ */
+void MainWindow::slotTempoNavigazione() try{
+    if(layout->getList()->getItem()){
+        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->tempoNavigazione(layout->getTempo());
+        std::string str="Il tempo di navigazione per fare "+std::to_string(layout->getMiglia())+" miglia e': "+std::to_string(mostra)+" h";
+        QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
     }
-    catch(NievaException* e){
-        if(e->getMessage()=="Maglev")   QMessageBox::information(this,"Nieva Trains","Questa operazione non puo' essere eseguita con il treno Maglev");
+} catch(...){}
+
+/**
+ * @brief slotMiglia mostra una finestra pop up contenente le miglia percorse dell'imbarcazione selezionata nella lista per navigare il tempo indicate nell'apposita barra dall'utente.
+ */
+void MainWindow::slotMiglia() try{
+    if(layout->getList()->getItem()){
+        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloMiglia(layout->getMiglia());
+        std::string str="Le miglia percorse navigando "+std::to_string(layout->getTempo())+" h sono: "+std::to_string(mostra)+" h";
+        QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
     }
-    catch(...){}
+} catch(...){}
+
+/**
+ * @brief slotTempoNavigazione mostra una finestra pop up contenente il tempo di navigazione dell'imbarcazione selezionata nella lista per navigare le miglia indicate nell'apposita barra dall'utente.
+ */
+void MainWindow::slotType() try{
+    if(layout->getList()->getItem()){
+        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->tempoNavigazione(layout->getTempo());
+        std::string str="Il tempo di navigazione per fare "+std::to_string(layout->getMiglia())+" miglia e': "+std::to_string(mostra)+" h";
+        QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
+    }
+} catch(...){}
+
+/**
+ * @brief slotMiglia mostra una finestra pop up contenente le miglia percorse dell'imbarcazione selezionata nella lista per navigare il tempo indicate nell'apposita barra dall'utente.
+ */
+void MainWindow::slotPatente() try{
+    if(layout->getList()->getItem()){
+        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloMiglia(layout->getMiglia());
+        std::string str="Le miglia percorse navigando "+std::to_string(layout->getTempo())+" h sono: "+std::to_string(mostra)+" h";
+        QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
+    }
+} catch(...){}
 
 MainWindow::~MainWindow()
 {

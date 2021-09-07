@@ -22,7 +22,7 @@ public:
     void setTipoBatteria(std::string);
     void setConsumoTermico(std::string);
     void setConsumoElettrico(std::string);
-    void getCapSerbatoi(unsigned int);
+    void setCapSerbatoi(unsigned int);
     void setCapBatteria(unsigned int);
     void setNumVele(unsigned int);
     void setMotoreAusiliario(bool);

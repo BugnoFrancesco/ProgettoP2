@@ -38,14 +38,18 @@ private:
     void searchPeso(unsigned int,bool);
     void searchVelocita(unsigned int,bool);
     void searchLunghezza(float,bool);
-    void searchCarburanteVapore(std::string);
-    void searchTemperaturaVapore(unsigned int, bool);
-    void searchEfficenzaElettrico(double,bool);
-    void searchPotenzaIC(unsigned int,bool);
-    void searchTrasmissioneElettrico(std::string);
-    void searchMotoreIC(std::string);
-    void searchMotorePrimario(std::string);
-    void searchTecnologiaMaglev(std::string);
+    void searchNumMotori(unsigned int,bool);
+    void searchPotenzaMotori(unsigned int, bool);
+    void searchConsumoTermico(unsigned int,bool);
+    void searchConsumoElettrico(unsigned int,bool);
+    void searchCapienzaSerbatoi(unsigned int,bool);
+    void searchCapienzaBatteria(unsigned int,bool);
+    void searchTipoMotore(std::string);
+    void searchTipoCarburante(std::string);
+    void searchTipoBatteria(std::string);
+    void searchNumVele(unsigned int,bool);
+    void searchMotoreAusi(bool,bool);
+    void searchPotenzaMotoreAusi(unsigned int,bool);
 
 public:
     MainWindow(Model* m,QWidget *parent = nullptr);
