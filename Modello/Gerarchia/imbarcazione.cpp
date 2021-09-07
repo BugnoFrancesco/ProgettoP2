@@ -90,9 +90,9 @@ std::string Imbarcazione::boat_toString() const{
  * @param miglia nautiche
 */
 float Imbarcazione::tempoNavigazione(unsigned int miglia) const{
-    return (miglia/velocita);
+    return static_cast<float>(static_cast<float>(miglia)/static_cast<float>(getVelocita()));
 }
 float Imbarcazione::calcoloMiglia(float tempo) const {
-    return (tempo*velocita);
+    return static_cast<float>(tempo*static_cast<float>(getVelocita()));
 }
 

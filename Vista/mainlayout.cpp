@@ -74,10 +74,10 @@ MainLayout::MainLayout(QWidget* p): QWidget(p),
     left->addWidget(flush);
     searchBar->setPlaceholderText("Cerca");
     searchBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[A-Z0-9a-z<>=, ]{0,50}/i")));
-    consumiBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
-    autonomiaBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
-    timeNavBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
-    migliaBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
+    consumiBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9.]{0,50}/i")));
+    autonomiaBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9.]{0,50}/i")));
+    timeNavBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9.]{0,50}/i")));
+    migliaBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9.]{0,50}/i")));
     searchField->addWidget(searchBar);
     searchField->addWidget(selectFilter);
     searchField->addWidget(search);
@@ -177,8 +177,8 @@ unsigned int MainLayout::getConsumi() const{
     return consumiBar->text().toUInt();
 }
 float MainLayout::getTempo() const{
-    return timeNavBar->text().toUInt();
+    return timeNavBar->text().toFloat();
 }
 float MainLayout::getMiglia() const{
-    return migliaBar->text().toUInt();
+    return migliaBar->text().toFloat();
 }

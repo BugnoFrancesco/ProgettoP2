@@ -854,8 +854,8 @@ void MainWindow::slotAutonomia() try{
  */
 void MainWindow::slotTempoNavigazione() try{
     if(layout->getList()->getItem()){
-        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->tempoNavigazione(layout->getTempo());
-        std::string str="Il tempo di navigazione per fare "+std::to_string(layout->getMiglia())+" miglia e': "+std::to_string(mostra)+" h";
+        float mostra=layout->getList()->getItem()->getImbarcazione()->tempoNavigazione(layout->getTempo());
+        std::string str="Il tempo di navigazione per fare "+std::to_string(layout->getTempo())+" miglia e': "+std::to_string(mostra)+" h";
         QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
     }
 } catch(...){}
@@ -865,8 +865,8 @@ void MainWindow::slotTempoNavigazione() try{
  */
 void MainWindow::slotMiglia() try{
     if(layout->getList()->getItem()){
-        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloMiglia(layout->getMiglia());
-        std::string str="Le miglia percorse navigando "+std::to_string(layout->getTempo())+" h sono: "+std::to_string(mostra)+" h";
+        float mostra=layout->getList()->getItem()->getImbarcazione()->calcoloMiglia(layout->getMiglia());
+        std::string str="Le miglia percorse navigando "+std::to_string(layout->getMiglia())+" h sono: "+std::to_string(mostra)+" miglia";
         QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
     }
 } catch(...){}
@@ -877,7 +877,7 @@ void MainWindow::slotMiglia() try{
 void MainWindow::slotType() try{
     if(layout->getList()->getItem()){
         std::string mostra=layout->getList()->getItem()->getImbarcazione()->tipoImbarcazione();
-        std::string str="Il tipo di quest'imbarcazione e': "+mostra;
+        std::string str="Per il codice della navigazione da diporto questa imbarcazione è classificata come: "+mostra;
         QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
     }
 } catch(...){}
@@ -889,8 +889,8 @@ void MainWindow::slotPatente() try{
     if(layout->getList()->getItem()){
         bool mostra=layout->getList()->getItem()->getImbarcazione()->patenteNautica();
         std::string str;
-        if(mostra)  str="Si";
-        else    str="No";
+        if(mostra)  str="Si, è richiesta la patente nautica per questa imbarcazione";
+        else    str="No, questa imbarcazione non necessita di patente nautica";
         QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
     }
 } catch(...){}
