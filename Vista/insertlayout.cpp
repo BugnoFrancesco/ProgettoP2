@@ -3,8 +3,8 @@
 InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new QVBoxLayout(this)),
     nomeL(new QLabel(this)), cantiereL(new QLabel(this)), speedL(new QLabel(this)), pesoL(new QLabel(this)), lunghezzaL(new QLabel(this)), numMotoriL(new QLabel(this)), potMotoreL(new QLabel(this)),
     consTermicoL(new QLabel(this)), consElettricoL(new QLabel(this)), capSerbatoiL(new QLabel(this)), capBatteriaL(new QLabel(this)), numVeleL(new QLabel(this)), potMotAusiL(new QLabel(this)),
-    nome(new QLabel(this)), cantiere(new QLabel(this)), speed(new QLabel(this)), peso(new QLabel(this)), lunghezza(new QLabel(this)), numMotori(new QLabel(this)), potMotore(new QLabel(this)),
-    consTermico(new QLabel(this)), consElettrico(new QLabel(this)), capSerbatoi(new QLabel(this)), capBatteria(new QLabel(this)), numVele(new QLabel(this)), potMotAusi(new QLabel(this)),
+    nome(new QLineEdit(this)), cantiere(new QLineEdit(this)), speed(new QLineEdit(this)), peso(new QLineEdit(this)), lunghezza(new QLineEdit(this)), numMotori(new QLineEdit(this)), potMotore(new QLineEdit(this)),
+    consTermico(new QLineEdit(this)), consElettrico(new QLineEdit(this)), capSerbatoi(new QLineEdit(this)), capBatteria(new QLineEdit(this)), numVele(new QLineEdit(this)), potMotAusi(new QLineEdit(this)),
     tipoMotore(new QComboBox(this)), tipoCarburante(new QComboBox(this)), tipoBatteria(new QComboBox(this)), motoreAusi(new QComboBox(this)), conferma(new QPushButton(this)), annulla(new QPushButton(this)), tipo(tipoT)
 
 {
@@ -197,15 +197,15 @@ unsigned int InsertLayout::getPotenzaMotore() const{
     return potMotore->text().toInt();
 }
 
-std::string InsertLayout::getTipoMotore() const{
-    return tipoMotore->currentIndex();
+ std::string InsertLayout::getTipoMotore() const{
+    return QString::number(tipoMotore->currentIndex()).toStdString();
 }
-std::string InsertLayout::getTipoCarburante() const{
-    return tipoCarburante->currentIndex();
+ std::string InsertLayout::getTipoCarburante() const{
+    return QString::number(tipoCarburante->currentIndex()).toStdString();
 }
 
-std::string InsertLayout::getTipoBatteria() const{
-    return tipoBatteria->currentIndex();
+ std::string InsertLayout::getTipoBatteria() const{
+    return QString::number(tipoBatteria->currentIndex()).toStdString();
 }
 
 float InsertLayout::getConsumoElettrico() const{
@@ -217,11 +217,11 @@ float InsertLayout::getConsumoTermico() const{
 }
 
 unsigned int InsertLayout::getCapSerbatoi() const{
-    return capSerbatoi->text().toInt();
+    return capSerbatoi->text().toUInt();
 }
 
 unsigned int InsertLayout::getCapBatteria() const{
-    return capBatteria->text().toInt();
+    return capBatteria->text().toUInt();
 }
 
 unsigned int InsertLayout::getNumVele() const{

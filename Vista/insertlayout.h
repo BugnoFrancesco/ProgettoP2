@@ -30,9 +30,9 @@ public:
     float getLunghezza() const;
     unsigned int getNumMotori()const;
     unsigned int getPotenzaMotore()const;
-    std::string getTipoMotore()const;
-    std::string getTipoCarburante()const;
-    std::string getTipoBatteria()const;
+     std::string getTipoMotore()const;
+     std::string  getTipoCarburante()const;
+     std::string  getTipoBatteria()const;
     float getConsumoTermico()const;
     float getConsumoElettrico()const;
     unsigned int getCapSerbatoi()const;

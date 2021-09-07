@@ -82,6 +82,11 @@ MainLayout::MainLayout(QWidget* p): QWidget(p),
     searchField->addWidget(selectFilter);
     searchField->addWidget(search);
     searchField->addWidget(annulla);
+
+    selectType->addItem("Motore Termico");
+    selectType->addItem("Motore Elettrico");
+    selectType->addItem("Vela");
+
     bts2->addWidget(modifica);
     bts2->addWidget(elimina);
     bts3->addWidget(selectType);

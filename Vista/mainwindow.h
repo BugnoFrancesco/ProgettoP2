@@ -58,7 +58,6 @@ public:
 
 public slots:
     void slotShowInfoGenerali();
-    void slotConversioneKMh();
     void slotAutore();
     void slotShowBoat();
     void slotFlush();

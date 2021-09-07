@@ -112,19 +112,19 @@ void MainWindow::slotInsertBoat() try {
     if(x==0){
         unsigned int numMotori=layoutIns->getNumMotori();
         unsigned int potMotore=layoutIns->getPotenzaMotore();
-        std::string tipoMotore=layoutIns->getTipoMotore();
+         std::string tipoMotore=layoutIns->getTipoMotore();
         float consumoT=layoutIns->getConsumoTermico();
         unsigned int capSerbatoi=layoutIns->getCapSerbatoi();
-        std::string tipoCarb=layoutIns->getTipoCarburante();
+         std::string tipoCarb=layoutIns->getTipoCarburante();
         Termico* boat=new Termico(nome, cantiere, peso, speed, lunghezza, numMotori, potMotore, tipoMotore, tipoCarb, consumoT, capSerbatoi);
         modello->push_end(boat);
     }else if(x==1){
         unsigned int numMotori=layoutIns->getNumMotori();
         unsigned int potMotore=layoutIns->getPotenzaMotore();
-        std::string tipoMotore=layoutIns->getTipoMotore();
+         std::string tipoMotore=layoutIns->getTipoMotore();
         float consumoE=layoutIns->getConsumoElettrico();
         unsigned int capBatteria=layoutIns->getCapBatteria();
-        std::string tipoBatt=layoutIns->getTipoBatteria();
+         std::string tipoBatt=layoutIns->getTipoBatteria();
         Elettrico* boat=new Elettrico(nome, cantiere, peso, speed, lunghezza, numMotori, potMotore, tipoMotore, tipoBatt, consumoE, capBatteria);
         modello->push_end(boat);
     }else if(x==2){
@@ -209,20 +209,20 @@ void MainWindow::slotModifyBoat(){
     if(tip==0){
         unsigned int numMotoriNew=layoutMod->getNumMotori();
         unsigned int potMotoreNew=layoutMod->getPotenzaMotore();
-        std::string tipoMotoreNew=layoutMod->getTipoMotore();
+         std::string tipoMotoreNew=layoutMod->getTipoMotore();
         float consumoTNew=layoutMod->getConsumoTermico();
         unsigned int capSerbatoiNew=layoutMod->getCapSerbatoi();
-        std::string tipoCarbNew=layoutMod->getTipoCarburante();
+         std::string tipoCarbNew=layoutMod->getTipoCarburante();
         Termico* barcaDaSostituire=new Termico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, tipoCarbNew, consumoTNew, capSerbatoiNew);
         modello->erase(x);
         modello->push_end(barcaDaSostituire);
     }else if(tip==1){
         unsigned int numMotoriNew=layoutMod->getNumMotori();
         unsigned int potMotoreNew=layoutMod->getPotenzaMotore();
-        std::string tipoMotoreNew=layoutMod->getTipoMotore();
+         std::string tipoMotoreNew=layoutMod->getTipoMotore();
         float consumoENew=layoutMod->getConsumoElettrico();
         unsigned int capBatteriaNew=layoutMod->getCapBatteria();
-        std::string tipoBattNew=layoutMod->getTipoBatteria();
+         std::string tipoBattNew=layoutMod->getTipoBatteria();
         Elettrico* barcaDaSostituire=new Elettrico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, tipoBattNew, consumoENew, capBatteriaNew);
         modello->erase(x);
         modello->push_end(barcaDaSostituire);
@@ -388,7 +388,7 @@ void MainWindow::searchNome(std::string n)
  * @brief searchCantiere filtra la lista delle imbarcazioni mantenendo solo le barche aventi il cantiere di costruzione simile al parametro inserito dall'utente
  * @param n = stringa inserita dall'utente
  */
-void MainWindow::searchCostruttore(std::string n)
+void MainWindow::searchCantiere(std::string n)
 {
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
@@ -449,7 +449,7 @@ void MainWindow::searchVelocita(unsigned int n, bool b){
  * @param n = lunghezza inserita dall'utente
  * @param b = scelta se selezionare solo i maggiori o solo i minori
  */
-void MainWindow::searchLunghezza(unsigned int n, bool b){
+void MainWindow::searchLunghezza(float n, bool b){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
         if(b && layout->getList()->getItemByIndex(i)->getLunghezza()>=n){
@@ -574,7 +574,7 @@ void MainWindow::searchConsumoElettrico(unsigned int n, bool b){
 void MainWindow::searchCapienzaSerbatoi(unsigned int n, bool b){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->type()=="Motore Termico"){
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
             if(Termico* t=static_cast<Termico*>(layout->getList()->getItemByIndex(i))){
                 if(b && n<t->getCapienzaSerbatoi()){
                     layout->getList()->erase(i);
@@ -601,7 +601,7 @@ void MainWindow::searchCapienzaSerbatoi(unsigned int n, bool b){
 void MainWindow::searchCapienzaBatteria(unsigned int n, bool b){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->type()=="Motore Elettrico"){
+        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
             if(Elettrico* t=static_cast<Elettrico*>(layout->getList()->getItemByIndex(i))){
                 if(b && n<t->getCapienzaBatteria()){
                     layout->getList()->erase(i);
@@ -693,16 +693,16 @@ void MainWindow::searchTipoMotore(std::string n){
                 else if(n=="Entrofuoribordo") test=true;
                 //eccezione ?
                 else throw new BoatException("ricerca sbagliata");
-                if(test!=t->getTipoMotore()){
+                /*if(test!=t->getTipoMotore()){
                         layout->getList()->erase(i);
                         --i; --lun;
                 }
             } else{
                 layout->getList()->erase(i);
                 --i; --lun;
-            }
+            }*/
         }
-
+    }
 }
 
 /**
@@ -721,21 +721,21 @@ void MainWindow::searchTipoCarburante(std::string n){
                 if(n=="diesel") test=false;
                 else if(n=="benzina")    test=true;
                 else throw new BoatException("ricerca sbagliata");
-                if(test!=t->getTipoCombustione()){
+                /*if(test!=t->getTipoCombustione()){
                     layout->getList()->erase(i);
                     --i; --lun;
                 }
             }else{
                 layout->getList()->erase(i);
                 --i; --lun;
-            }
+            }*/
         }
         else{
             layout->getList()->erase(i);
             --i; --lun;
         }
         }
-
+    }
 }
 /**
  * @brief searchTipoBatteria filtra la lista delle imbarcazioni mantenendo solo quelle a motore elettrico aventi il tipo di batterie uguale al parametro inserito dall'utente
@@ -753,20 +753,21 @@ void MainWindow::searchTipoBatteria(std::string n){
                 if(n=="piombo") test=false;
                 else if(n=="litio")    test=true;
                 else throw new BoatException("ricerca sbagliata");
-                if(test!=t->getTipoBatteria()){
+                /*if(test!=t->getTipoBatteria()){
                     layout->getList()->erase(i);
                     --i; --lun;
                 }
             }else{
                 layout->getList()->erase(i);
                 --i; --lun;
-            }
+            }*/
         }
         else{
             layout->getList()->erase(i);
             --i; --lun;
         }
         }
+    }
 
 }
 /**
