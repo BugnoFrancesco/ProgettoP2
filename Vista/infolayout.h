@@ -14,9 +14,11 @@ class InfoLayout: public QDialog
     QLabel* third;
     QLabel* fourth;
     QLabel* fifth;
+    QLabel* sixth;
+    QLabel* seventh;
 
 public:
-    InfoLayout(QWidget * =nullptr, QString prima ="", QString seconda ="",QString terza ="",QString quarta ="",QString quinta ="");
+    InfoLayout(QWidget * =nullptr, QString ="", QString ="",QString ="",QString ="",QString ="", QString ="", QString ="");
     void setMargin(int margin =20);
     void setDimensioni(int width =100, int height =100);
 };
