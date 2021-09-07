@@ -866,23 +866,25 @@ void MainWindow::slotMiglia() try{
 } catch(...){}
 
 /**
- * @brief slotTempoNavigazione mostra una finestra pop up contenente il tempo di navigazione dell'imbarcazione selezionata nella lista per navigare le miglia indicate nell'apposita barra dall'utente.
+ * @brief slotType mostra una finestra pop up contenente il tipo dell'imbarcazione selezionata nella lista.
  */
 void MainWindow::slotType() try{
     if(layout->getList()->getItem()){
-        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->tempoNavigazione(layout->getTempo());
-        std::string str="Il tempo di navigazione per fare "+std::to_string(layout->getMiglia())+" miglia e': "+std::to_string(mostra)+" h";
+        std::string mostra=layout->getList()->getItem()->getImbarcazione()->tipoPropulsione();
+        std::string str="Il tipo di propulsione di quest'imbarcazione e': "+mostra;
         QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
     }
 } catch(...){}
 
 /**
- * @brief slotMiglia mostra una finestra pop up contenente le miglia percorse dell'imbarcazione selezionata nella lista per navigare il tempo indicate nell'apposita barra dall'utente.
+ * @brief slotPatente mostra una finestra pop up contente la verifica della patente nautica con risposta Si o No.
  */
 void MainWindow::slotPatente() try{
     if(layout->getList()->getItem()){
-        unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloMiglia(layout->getMiglia());
-        std::string str="Le miglia percorse navigando "+std::to_string(layout->getTempo())+" h sono: "+std::to_string(mostra)+" h";
+        bool mostra=layout->getList()->getItem()->getImbarcazione()->patenteNautica();
+        std::string str;
+        if(mostra)  str="Si";
+        else    str="No";
         QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
     }
 } catch(...){}
