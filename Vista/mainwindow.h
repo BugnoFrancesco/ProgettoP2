@@ -74,6 +74,7 @@ public slots:
     void slotMiglia();
     void slotType();
     void slotPatente();
+    void slotEnableMotAusi(int);
 };
 
 #endif // MAINWINDOW_H

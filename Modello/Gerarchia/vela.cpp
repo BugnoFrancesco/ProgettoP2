@@ -46,12 +46,12 @@ std::string Vela::boat_toString() const{
     std::string m_aus="";
     std::string n_vele=std::to_string(getNumVele());
     if(getMotoreAusiliario()==true){
-        m_aus="si";
+        m_aus="Si";
         std::string p_motA = std::to_string(getPotenzaMotoreAusiliario());
         s.append("\nNumero vele: "+n_vele+"\nMotore ausiliario: "+m_aus+"\nPotenza motore ausiliario: "+p_motA);
     }
     else {
-        m_aus="no";
+        m_aus="No";
         s.append("\nNumero vele: "+n_vele+"\nMotore ausiliario: "+m_aus);
     }
     return s;

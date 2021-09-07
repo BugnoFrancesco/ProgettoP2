@@ -5,6 +5,7 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
     consTermicoL(new QLabel(this)), consElettricoL(new QLabel(this)), capSerbatoiL(new QLabel(this)), capBatteriaL(new QLabel(this)), numVeleL(new QLabel(this)), potMotAusiL(new QLabel(this)),
     nome(new QLineEdit(this)), cantiere(new QLineEdit(this)), speed(new QLineEdit(this)), peso(new QLineEdit(this)), lunghezza(new QLineEdit(this)), numMotori(new QLineEdit(this)), potMotore(new QLineEdit(this)),
     consTermico(new QLineEdit(this)), consElettrico(new QLineEdit(this)), capSerbatoi(new QLineEdit(this)), capBatteria(new QLineEdit(this)), numVele(new QLineEdit(this)), potMotAusi(new QLineEdit(this)),
+    tipoMotoreL(new QLabel(this)), tipoCarburanteL(new QLabel(this)), tipoBatteriaL(new QLabel(this)), motoreAusiL(new QLabel(this)),
     tipoMotore(new QComboBox(this)), tipoCarburante(new QComboBox(this)), tipoBatteria(new QComboBox(this)), motoreAusi(new QComboBox(this)), conferma(new QPushButton(this)), annulla(new QPushButton(this)), tipo(tipoT)
 
 {
@@ -25,32 +26,37 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
     numVeleL->setText("Numero di vele");
     potMotAusiL->setText("Potenza motore ausiliario");
 
+    tipoMotoreL->setText("Tipo motore");
+    tipoCarburanteL->setText("Tipo carburante");
+    tipoBatteriaL->setText("Tipo batteria");
+    motoreAusiL->setText("Motore ausiliario");
+
     nome->setPlaceholderText("Inserisci nome del modello di imbarcazione");
-    nome->setValidator(new QRegExpValidator(QRegExp("[A-Z0-9a-z ]{0,50}")));
+    nome->setValidator(new QRegularExpressionValidator(QRegularExpression("[A-Z0-9a-z ]{0,50}")));
     cantiere->setPlaceholderText("Inserisci cantiere di costruzione");
-    cantiere->setValidator(new QRegExpValidator(QRegExp("[A-Z0-9a-z]{0,50}")));
+    cantiere->setValidator(new QRegularExpressionValidator(QRegularExpression("[A-Z0-9a-z]{0,50}")));
     speed->setPlaceholderText("Inserisci velocità di crociera (Nodi)");
-    speed->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    speed->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
     peso->setPlaceholderText("Inserisci peso (kg)");
-    peso->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    peso->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
     lunghezza->setPlaceholderText("Inserisci lunghezza (m)");
-    lunghezza->setValidator(new QRegExpValidator(QRegExp("[0-9.]{0,5}")));
+    lunghezza->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9.]{0,5}")));
     numMotori->setPlaceholderText("Inserisci il numero di motori");
-    numMotori->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    numMotori->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
     potMotore->setPlaceholderText("Inserisci la potenza del singolo motore (Cv)");
-    potMotore->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    potMotore->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
     consTermico->setPlaceholderText("Inserisci il consumo del motore termico (L/h)");
-    consTermico->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    consTermico->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
     consElettrico->setPlaceholderText("Inserisci il consumo del motore elettrico (Kw/h)");
-    consElettrico->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    consElettrico->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
     capSerbatoi->setPlaceholderText("Inserisci la capienza dei serbatoi (L)");
-    capSerbatoi->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    capSerbatoi->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
     capBatteria->setPlaceholderText("Inserisci la capienza delle batterie (Kw)");
-    capBatteria->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    capBatteria->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
     numVele->setPlaceholderText("Inserisci il numero di vele");
-    numVele->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    numVele->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
     potMotAusi->setPlaceholderText("Inserisci la potenza del motore ausiliario (Cv)");
-    potMotAusi->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,5}")));
+    potMotAusi->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}")));
 
     tipoMotore->addItem("Entrobordo");
     tipoMotore->addItem("Fuoribordo");
@@ -62,8 +68,8 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
     tipoBatteria->addItem("Litio");
     tipoBatteria->addItem("Piombo");
 
-    motoreAusi->addItem("Si");
     motoreAusi->addItem("No");
+    motoreAusi->addItem("Si");
 
     numMotori->hide();
     potMotore->hide();
@@ -73,6 +79,7 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
     capBatteria->hide();
     numVele->hide();
     potMotAusi->hide();
+    potMotAusi->setEnabled(0);
     numMotoriL->hide();
     potMotoreL->hide();
     consTermicoL->hide();
@@ -111,11 +118,13 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
         tipoMotore->show();
         tipoCarburante->show();
 
+        layoutPopUp->addWidget(tipoMotoreL);
         layoutPopUp->addWidget(tipoMotore);
         layoutPopUp->addWidget(numMotoriL);
         layoutPopUp->addWidget(numMotori);
         layoutPopUp->addWidget(potMotoreL);
         layoutPopUp->addWidget(potMotore);
+        layoutPopUp->addWidget(tipoCarburanteL);
         layoutPopUp->addWidget(tipoCarburante);
         layoutPopUp->addWidget(consTermicoL);
         layoutPopUp->addWidget(consTermico);
@@ -134,11 +143,13 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
         tipoMotore->show();
         tipoBatteria->show();
 
+        layoutPopUp->addWidget(tipoMotoreL);
         layoutPopUp->addWidget(tipoMotore);
         layoutPopUp->addWidget(numMotoriL);
         layoutPopUp->addWidget(numMotori);
         layoutPopUp->addWidget(potMotoreL);
         layoutPopUp->addWidget(potMotore);
+        layoutPopUp->addWidget(tipoBatteriaL);
         layoutPopUp->addWidget(tipoBatteria);
         layoutPopUp->addWidget(consElettricoL);
         layoutPopUp->addWidget(consElettrico);
@@ -154,15 +165,15 @@ InsertLayout::InsertLayout(QWidget* p, int tipoT): QDialog(p), layoutPopUp(new Q
 
         layoutPopUp->addWidget(numVeleL);
         layoutPopUp->addWidget(numVele);
+        layoutPopUp->addWidget(motoreAusiL);
         layoutPopUp->addWidget(motoreAusi);
         layoutPopUp->addWidget(potMotAusiL);
         layoutPopUp->addWidget(potMotAusi);
 
-    //default:
-        //throwa qualcosa
     }
     connect(conferma, SIGNAL(clicked()), p, SLOT(slotInsertBoat()));
     connect(annulla, SIGNAL(clicked()), this, SLOT(close()));
+    connect(motoreAusi, SIGNAL(currentIndexChanged(int)), p, SLOT(slotEnableMotAusi(int)));
     layoutPopUp->addWidget(annulla);
     layoutPopUp->addWidget(conferma);
 
@@ -198,14 +209,14 @@ unsigned int InsertLayout::getPotenzaMotore() const{
 }
 
  std::string InsertLayout::getTipoMotore() const{
-    return QString::number(tipoMotore->currentIndex()).toStdString();
+    return tipoMotore->currentText().toStdString();
 }
  std::string InsertLayout::getTipoCarburante() const{
-    return QString::number(tipoCarburante->currentIndex()).toStdString();
+    return tipoCarburante->currentText().toStdString();
 }
 
  std::string InsertLayout::getTipoBatteria() const{
-    return QString::number(tipoBatteria->currentIndex()).toStdString();
+    return tipoBatteria->currentText().toStdString();
 }
 
 float InsertLayout::getConsumoElettrico() const{
@@ -238,4 +249,18 @@ unsigned int InsertLayout::getPotenzaMotoreAusiliario() const{
 
 unsigned int InsertLayout::getTipo() const{
     return tipo;
+}
+
+
+
+
+
+void InsertLayout::support_enableMotoreAusiliario(int i)
+{
+    if(i==1){
+        potMotAusi->setEnabled(1);
+    }else{
+
+        potMotAusi->setEnabled(0);
+    }
 }

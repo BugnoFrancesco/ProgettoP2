@@ -895,6 +895,11 @@ void MainWindow::slotPatente() try{
     }
 } catch(...){}
 
+void MainWindow::slotEnableMotAusi(int i)
+{
+    layoutIns->support_enableMotoreAusiliario(i);
+}
+
 MainWindow::~MainWindow()
 {
     delete modello;

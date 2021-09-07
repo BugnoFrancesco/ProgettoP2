@@ -19,6 +19,7 @@ protected:
     QVBoxLayout* layoutPopUp;
     QLabel *nomeL, *cantiereL, *speedL, *pesoL, *lunghezzaL, *numMotoriL, *potMotoreL, *consTermicoL, *capSerbatoiL, *consElettricoL, *capBatteriaL, *numVeleL, *potMotAusiL;
     QLineEdit *nome, *cantiere, *speed, *peso, *lunghezza, *numMotori, *potMotore, *consTermico, *capSerbatoi, *consElettrico, *capBatteria, *numVele, *potMotAusi;
+    QLabel *tipoMotoreL, *tipoCarburanteL, *tipoBatteriaL, *motoreAusiL;
     QComboBox *tipoMotore, *tipoCarburante, *tipoBatteria, *motoreAusi;
     QPushButton *conferma, *annulla;
     unsigned int tipo;
@@ -42,6 +43,8 @@ public:
     unsigned int getPotenzaMotoreAusiliario()const;
     unsigned int getTipo()const;
     InsertLayout(QWidget * =nullptr, int tipoT=0);
+
+    void support_enableMotoreAusiliario(int);
 };
 
 #endif // INSERTLAYOUT_H
