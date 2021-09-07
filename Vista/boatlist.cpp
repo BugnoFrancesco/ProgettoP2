@@ -34,7 +34,7 @@ Imbarcazione* BoatListWidget::getItemByIndex(unsigned int x) const
  * @param boat = imbarcazione da aggiungere
  * @param x = posizione reale nel suo contenitore dell'imbarcazione
  */
-void BoatListWidget::addBoatList(Imbarcazione* boat, unsigned int x){
+void BoatListWidget::addImbarcazioneList(Imbarcazione* boat, unsigned int x){
     BoatListWidgetItem* item= new BoatListWidgetItem(boat, x);
     addItem(item);
 }

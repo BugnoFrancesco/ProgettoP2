@@ -17,7 +17,7 @@ class MenuBar : public QMenuBar
 
 
 public:
-    MenuBarTrain(QWidget* = nullptr);
+    MenuBar(QWidget* = nullptr);
 
 };
 

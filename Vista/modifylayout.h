@@ -20,8 +20,8 @@ public:
     void setTipoMotore(std::string);
     void setTipoCarburante(std::string);
     void setTipoBatteria(std::string);
-    void setConsumoTermico(std::string);
-    void setConsumoElettrico(std::string);
+    void setConsumoTermico(float);
+    void setConsumoElettrico(float);
     void setCapSerbatoi(unsigned int);
     void setCapBatteria(unsigned int);
     void setNumVele(unsigned int);

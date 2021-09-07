@@ -2,14 +2,15 @@
 #include "menubar.h"
 #include "Modello/model.h"
 #include <iostream>
+#include <QRegularExpressionValidator>
 
 MainLayout::MainLayout(QWidget* p): QWidget(p),
     text1(new QLabel(this)),
     text2(new QLabel(this)),
     text3(new QLabel(this)),
     text4(new QLabel(this)),
-    selectType(new ComboType(this)),
-    selectFilter(new ComboFilter(this)),
+    selectType(new QComboBox(this)),
+    selectFilter(new QComboBox(this)),
     infoBoat(new QTextBrowser(this)),
     flush(new QPushButton(this)),
     search(new QPushButton(this)),
@@ -67,15 +68,16 @@ MainLayout::MainLayout(QWidget* p): QWidget(p),
     QHBoxLayout* temp=new QHBoxLayout();
     QHBoxLayout* migl=new QHBoxLayout();
 
+
     left->addWidget(text1);
     left->addWidget(boatList);
     left->addWidget(flush);
     searchBar->setPlaceholderText("Cerca");
-    searchBar->setValidator(new QRegExpValidator(QRegExp("[A-Z0-9a-z<>=, ]{0,50}/i")));
-    consumiBar->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,50}/i")));
-    autonomiaBar->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,50}/i")));
-    timeNavBar->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,50}/i")));
-    migliaBar->setValidator(new QRegExpValidator(QRegExp("[0-9]{0,50}/i")));
+    searchBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[A-Z0-9a-z<>=, ]{0,50}/i")));
+    consumiBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
+    autonomiaBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
+    timeNavBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
+    migliaBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
     searchField->addWidget(searchBar);
     searchField->addWidget(selectFilter);
     searchField->addWidget(search);
@@ -126,25 +128,25 @@ MainLayout::MainLayout(QWidget* p): QWidget(p),
 
 }
 /**
- * @brief estraiTrenoSelezionato ritorna l'indice del treno selezionato nella lista dei treni
+ * @brief estraiBarcaSelezionata ritorna l'indice del treno selezionato nella lista dei treni
  * @return intero rappresentante un indice
  */
-int MainLayout::estraiTrenoSelezionato() const{
+int MainLayout::estraiBarcaSelezionata() const{
     return boatList->getIndex();
 }
 BoatListWidget* MainLayout::getList() const{
     return boatList;
 }
 /**
- * @brief stampaDettagliTreno stampa nell'apposito spazio la stringa che gli viene passata (che rappresenterà un treno in questo formato)
- * @param s= treno in formato stringa
+ * @brief stampaDettagliBarca stampa nell'apposito spazio la stringa che gli viene passata (che rappresenterà una barca in questo formato)
+ * @param s= barca in formato stringa
  */
 void MainLayout::stampaDettagliBarca(std::string s) const{
     infoBoat->clear();
     infoBoat->setText(QString::fromStdString(s));
 }
 /**
- * @brief flushList svuota la lista dei treni
+ * @brief flushList svuota la lista
  */
 void MainLayout::flushList(){
     infoBoat->clear();
@@ -169,7 +171,7 @@ unsigned int MainLayout::getAutonomia() const{
 unsigned int MainLayout::getConsumi() const{
     return consumiBar->text().toUInt();
 }
-float MainLayout::getTempoNavigazione() const{
+float MainLayout::getTempo() const{
     return timeNavBar->text().toUInt();
 }
 float MainLayout::getMiglia() const{

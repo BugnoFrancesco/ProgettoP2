@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include "boatexception.h"
+#include <QMenuBar>
 using std::string;
 using std::cout;
 
@@ -122,7 +123,7 @@ void MainWindow::slotInsertBoat() try {
         unsigned int potMotore=layoutIns->getPotenzaMotore();
         std::string tipoMotore=layoutIns->getTipoMotore();
         float consumoE=layoutIns->getConsumoElettrico();
-        std::string capBatteria=layoutIns->getCapBatteria();
+        unsigned int capBatteria=layoutIns->getCapBatteria();
         std::string tipoBatt=layoutIns->getTipoBatteria();
         Elettrico* boat=new Elettrico(nome, cantiere, peso, speed, lunghezza, numMotori, potMotore, tipoMotore, tipoBatt, consumoE, capBatteria);
         modello->push_end(boat);
@@ -213,7 +214,8 @@ void MainWindow::slotModifyBoat(){
         unsigned int capSerbatoiNew=layoutMod->getCapSerbatoi();
         std::string tipoCarbNew=layoutMod->getTipoCarburante();
         Termico* barcaDaSostituire=new Termico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, tipoCarbNew, consumoTNew, capSerbatoiNew);
-        //modello->sostituisci(barcaDaSostituire, x);
+        modello->erase(x);
+        modello->push_end(barcaDaSostituire);
     }else if(tip==1){
         unsigned int numMotoriNew=layoutMod->getNumMotori();
         unsigned int potMotoreNew=layoutMod->getPotenzaMotore();
@@ -222,7 +224,8 @@ void MainWindow::slotModifyBoat(){
         unsigned int capBatteriaNew=layoutMod->getCapBatteria();
         std::string tipoBattNew=layoutMod->getTipoBatteria();
         Elettrico* barcaDaSostituire=new Elettrico(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, numMotoriNew, potMotoreNew, tipoMotoreNew, tipoBattNew, consumoENew, capBatteriaNew);
-        //modello->sostituisci(barcaDaSostituire, x);
+        modello->erase(x);
+        modello->push_end(barcaDaSostituire);
     }else if(tip==2){
         unsigned int numVeleNew=layoutMod->getNumMotori();
         unsigned int potMotoreAusNew=layoutMod->getPotenzaMotoreAusiliario();
@@ -230,7 +233,7 @@ void MainWindow::slotModifyBoat(){
         Vela* barcaDaSostituire=new Vela(nomeNew, cantiereNew, pesoNew, speedNew, lunghezzaNew, motoreAusNew, potMotoreAusNew, numVeleNew);
         modello->erase(x);
         modello->push_end(barcaDaSostituire);
-        //modello->sostituisci(barcaDaSostituire, x);
+
     }
     //refresh lista
     refreshList();
@@ -738,7 +741,7 @@ void MainWindow::searchTipoCarburante(std::string n){
  * @brief searchTipoBatteria filtra la lista delle imbarcazioni mantenendo solo quelle a motore elettrico aventi il tipo di batterie uguale al parametro inserito dall'utente
  * @param n = stringa inserita dall'utente
  */
-void MainWindow::searchTipoCarburante(std::string n){
+void MainWindow::searchTipoBatteria(std::string n){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
         if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){

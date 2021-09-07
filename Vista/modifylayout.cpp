@@ -64,17 +64,17 @@ void ModifyLayout::setMotoreAusiliario(bool y)
 }
 
 
-void ModifyLayout::setConsumoTermico(std::string str)
+void ModifyLayout::setConsumoTermico(float x)
 {
-    consTermico->setText(QString::fromStdString(str));
+    consTermico->setText(QString::number(x));
 }
 
-void ModifyLayout::setConsumoElettrico(std::string str)
+void ModifyLayout::setConsumoElettrico(float x)
 {
-    consElettrico->setText(QString::fromStdString(str));
+    consElettrico->setText(QString::number(x));
 }
 
-void ModifyLayout::getCapSerbatoi(unsigned int x)
+void ModifyLayout::setCapSerbatoi(unsigned int x)
 {
     capSerbatoi->setText(QString::number(x));
 }
