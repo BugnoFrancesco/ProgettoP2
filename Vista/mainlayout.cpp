@@ -74,9 +74,9 @@ MainLayout::MainLayout(QWidget* p): QWidget(p),
     left->addWidget(flush);
     searchBar->setPlaceholderText("Cerca");
     searchBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[A-Z0-9a-z<>=, ]{0,50}/i")));
-    consumiBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9.]{0,50}/i")));
-    autonomiaBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9.]{0,50}/i")));
-    timeNavBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9.]{0,50}/i")));
+    consumiBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
+    autonomiaBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
+    timeNavBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,50}/i")));
     migliaBar->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9.]{0,50}/i")));
     searchField->addWidget(searchBar);
     searchField->addWidget(selectFilter);
@@ -86,6 +86,12 @@ MainLayout::MainLayout(QWidget* p): QWidget(p),
     selectType->addItem("Motore Termico");
     selectType->addItem("Motore Elettrico");
     selectType->addItem("Vela");
+
+    selectFilter->addItem("Nome");
+    selectFilter->addItem("Cantiere");
+    selectFilter->addItem("Peso");
+    selectFilter->addItem("Velocità");
+    selectFilter->addItem("Lunghezza");
 
     bts2->addWidget(modifica);
     bts2->addWidget(elimina);

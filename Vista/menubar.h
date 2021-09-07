@@ -8,11 +8,8 @@ class MenuBar : public QMenuBar
     Q_OBJECT
 
     QWidget* parent;
-    QMenu* conversioniUtili;
 
     QAction* infoGenerali;
-    QAction* conversioneKMh;
-    QAction* conversioneKM;
     QAction* autore;
 
 

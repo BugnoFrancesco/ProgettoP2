@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include "boatexception.h"
 #include <QMenuBar>
+#include <math.h>
 using std::string;
 using std::cout;
 
@@ -256,94 +257,15 @@ void MainWindow::slotCerca(){
         searchCantiere(parametro);
         break;
     case 2:
-    if(parametro.substr(0,1)=="<")
-        searchPeso(std::stoi(parametro.substr(1)), false);
-    else if(parametro.substr(0,1)==">")
-        searchPeso(std::stoi(parametro=parametro.substr(1)), true);
-    else
-        searchPeso(std::stoi(parametro), false);
-    break;
+        searchPeso(std::stoi(parametro));
+        break;
     case 3:
-    if(parametro.substr(0,1)=="<")
-        searchVelocita(std::stoi(parametro.substr(1)), false);
-    else if(parametro.substr(0,1)==">")
-        searchVelocita(std::stoi(parametro=parametro.substr(1)), true);
-    else
-        searchVelocita(std::stoi(parametro), false);
-    break;
+        searchVelocita(std::stoi(parametro));
+        break;
     case 4:
-        if(parametro.substr(0,1)=="<")
-            searchLunghezza(std::stoi(parametro.substr(1)), false);
-        else if(parametro.substr(0,1)==">")
-            searchLunghezza(std::stoi(parametro=parametro.substr(1)), true);
-        else
-            searchLunghezza(std::stoi(parametro), false);
+        searchLunghezza(std::stoi(parametro));
         break;
-    case 5:
-           if(parametro.substr(0,1)=="<")
-               searchNumMotori(std::atof(parametro.substr(1).c_str()), true);
-           else if(parametro.substr(0,1)==">")
-               searchNumMotori(std::atof(parametro.substr(1).c_str()), false);
-           else
-               searchNumMotori(std::atof(parametro.substr(0).c_str()), false);
-           break;
-    case 6:
-        if(parametro.substr(0,1)=="<")
-            searchPotenzaMotori(std::atof(parametro.substr(1).c_str()), true);
-        else if(parametro.substr(0,1)==">")
-            searchPotenzaMotori(std::atof(parametro.substr(1).c_str()), false);
-        else
-            searchPotenzaMotori(std::atof(parametro.substr(0).c_str()), false);
-        break;
-    case 7:
-        searchTipoMotore(parametro);
-        break;
-    case 8:
-           if(parametro.substr(0,1)=="<")
-               searchConsumoTermico(std::atof(parametro.substr(1).c_str()), true);
-           else if(parametro.substr(0,1)==">")
-               searchConsumoTermico(std::atof(parametro.substr(1).c_str()), false);
-           else{
-               searchConsumoTermico(std::atof(parametro.substr(0).c_str()), false);}
-           break;
-    case 9:
-        if(parametro.substr(0,1)=="<")
-            searchCapienzaSerbatoi(std::atof(parametro.substr(1).c_str()), true);
-        else if(parametro.substr(0,1)==">")
-            searchCapienzaSerbatoi(std::atof(parametro.substr(1).c_str()), false);
-        else{
-            searchCapienzaSerbatoi(std::atof(parametro.substr(0).c_str()), false);}
-        break;
-    case 10:
-        searchTipoCarburante(parametro);
-        break;
-    case 11:
-        if(parametro.substr(0,1)=="<")
-            searchConsumoElettrico(std::atof(parametro.substr(1).c_str()), true);
-        else if(parametro.substr(0,1)==">")
-            searchConsumoElettrico(std::atof(parametro.substr(1).c_str()), false);
-        else{
-            searchConsumoElettrico(std::atof(parametro.substr(0).c_str()), false);}
-        break;
-    case 12:
-        if(parametro.substr(0,1)=="<")
-            searchCapienzaBatteria(std::atof(parametro.substr(1).c_str()), true);
-        else if(parametro.substr(0,1)==">")
-            searchCapienzaBatteria(std::atof(parametro.substr(1).c_str()), false);
-        else{
-            searchCapienzaBatteria(std::atof(parametro.substr(0).c_str()), false);}
-        break;
-    case 13:
-        searchTipoBatteria(parametro);
-        break;
-    case 14:
-        if(parametro.substr(0,1)=="<")
-            searchNumVele(std::atof(parametro.substr(1).c_str()), true);
-        else if(parametro.substr(0,1)==">")
-            searchNumVele(std::atof(parametro.substr(1).c_str()), false);
-        else
-            searchNumVele(std::atof(parametro.substr(0).c_str()), false);
-        break;
+
     }
     }
     catch(BoatException* e){
@@ -411,15 +333,10 @@ void MainWindow::searchCantiere(std::string n)
  * @param n = peso inserito dall'utente
  * @param b = scelta se selezionare solo i maggiori o solo i minori
  */
-void MainWindow::searchPeso(unsigned int n, bool b){
+void MainWindow::searchPeso(unsigned int n){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(b && layout->getList()->getItemByIndex(i)->getPeso()<n){
-            //maggiore
-            layout->getList()->erase(i);
-            --i; --lun;
-        }else if(!b && layout->getList()->getItemByIndex(i)->getPeso()>=n){
-            //minore
+        if(layout->getList()->getItemByIndex(i)->getPeso()<n){
             layout->getList()->erase(i);
             --i; --lun;
         }
@@ -430,18 +347,14 @@ void MainWindow::searchPeso(unsigned int n, bool b){
  * @param n = velocita inserito dall'utente
  * @param b = scelta se selezionare solo i maggiori o solo i minori
  */
-void MainWindow::searchVelocita(unsigned int n, bool b){
+void MainWindow::searchVelocita(unsigned int n){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(b && layout->getList()->getItemByIndex(i)->getVelocita()>=n){
-            //maggiore
-            layout->getList()->erase(i);
-            --i; --lun;
-        }else if(!b && layout->getList()->getItemByIndex(i)->getVelocita()<n){
-            //minore
+        if( layout->getList()->getItemByIndex(i)->getVelocita()<n){
             layout->getList()->erase(i);
             --i; --lun;
         }
+
     }
 }
 /**
@@ -449,364 +362,23 @@ void MainWindow::searchVelocita(unsigned int n, bool b){
  * @param n = lunghezza inserita dall'utente
  * @param b = scelta se selezionare solo i maggiori o solo i minori
  */
-void MainWindow::searchLunghezza(float n, bool b){
+void MainWindow::searchLunghezza(float n){
     unsigned int lun=layout->getList()->count();
     for(unsigned int i=0; i<lun; ++i){
-        if(b && layout->getList()->getItemByIndex(i)->getLunghezza()>=n){
-            //maggiore
-            layout->getList()->erase(i);
-            --i; --lun;
-        }else if(!b && layout->getList()->getItemByIndex(i)->getLunghezza()<n){
-            //minore
+        if(layout->getList()->getItemByIndex(i)->getLunghezza()<n){
             layout->getList()->erase(i);
             --i; --lun;
         }
+
     }
 }
 
-/**
- * @brief searchNumMotori filtra la lista delle imbarcazioni mantenendo solo quelle aventi il numero di motori maggiore o minore del parametro inserito dall'utente
- * @param n = numero di motori inserito dall'utente
- * @param b = scelta se selezionare solo i maggiori o solo i minori
- */
-void MainWindow::searchNumMotori(unsigned int n, bool b){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-            if(Motore* t=dynamic_cast<Motore*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getNumMotori()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }else if(!b && n>=t->getNumMotori()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }
-        }
-}
 
-/**
- * @brief searchPotenzaMotori filtra la lista delle imbarcazioni mantenendo solo quelle aventi la potenza del singolo motore maggiore o minore del parametro inserito dall'utente
- * @param n = potenza singolo motore inserito dall'utente
- * @param b = scelta se selezionare solo i maggiori o solo i minori
- */
-void MainWindow::searchPotenzaMotori(unsigned int n, bool b){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-            if(Motore* t=dynamic_cast<Motore*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getPotenzaMotore()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }else if(!b && n>=t->getPotenzaMotore()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }
-        }
-}
-
-/**
- * @brief searchConsumoTermico filtra la lista delle imbarcazioni mantenendo solo quelle a combustione termica aventi i consumi del motore maggiore o minore del parametro inserito dall'utente
- * @param n= consumo carburante inserita dall'utente
- * @param b= scelta se selezionare solo i maggiori o solo i minori
- */
-void MainWindow::searchConsumoTermico(unsigned int n, bool b){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
-            if(Termico* t=dynamic_cast<Termico*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getConsumo()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }else if(!b && n>=t->getConsumo()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }
-        }else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-    }
-}
-
-/**
- * @brief searchConsumoElettrico filtra la lista delle imbarcazioni mantenendo solo quelle a combustione elettrica aventi i consumi della batteria maggiore o minore del parametro inserito dall'utente
- * @param n = consumo batteria inserita dall'utente
- * @param b = scelta se selezionare solo i maggiori o solo i minori
- */
-void MainWindow::searchConsumoElettrico(unsigned int n, bool b){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
-            if(Elettrico* t=dynamic_cast<Elettrico*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getConsumo()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }else if(!b && n>=t->getConsumo()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }
-        }else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-    }
-}
-
-/**
- * @brief searchCapienzaSerbatoi filtra la lista delle imbarcazioni mantenendo solo quelle a motore termico aventi la capieza dei serbatoi maggiore o minore del parametro inserito dall'utente
- * @param n = capienza in litri inserita dall'utente
- * @param b= scelta se selezionare solo i maggiori o solo i minori
- */
-void MainWindow::searchCapienzaSerbatoi(unsigned int n, bool b){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
-            if(Termico* t=static_cast<Termico*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getCapienzaSerbatoi()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }else if(!b && n>=t->getCapienzaSerbatoi()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }
-        }else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-    }
-}
-/**
- * @brief searchCapienzaBatteria filtra la lista delle imbarcazioni mantenendo solo quelle a motore elettrico aventi la capieza delle batterie maggiore o minore del parametro inserito dall'utente
- * @param n = capienza in KW delle batterie inserita dall'utente
- * @param b = scelta se selezionare solo i maggiori o solo i minori
- */
-void MainWindow::searchCapienzaBatteria(unsigned int n, bool b){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
-            if(Elettrico* t=static_cast<Elettrico*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getCapienzaBatteria()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }else if(!b && n>=t->getCapienzaBatteria()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }
-        }else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-    }
-}
-
-/**
- * @brief searchNumVele filtra la lista delle imbarcazioni mantenendo solo quelle a vela aventi il numero di vele maggiore o minore del parametro inserito dall'utente
- * @param n = numero di vele inserite dall'utente
- * @param b= scelta se selezionare solo i maggiori o solo i minori
- */
-void MainWindow::searchNumVele(unsigned int n, bool b){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Vela"){
-            if(Vela* t=dynamic_cast<Vela*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getNumVele()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }else if(!b && n>=t->getNumVele()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }
-        }else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-    }
-}
-
-/**
- * @brief searchPotenzaMotoreAusi filtra la lista delle imbarcazioni mantenendo solo quelle a vela aventi la potenza del motore ausiliario maggiore o minore del parametro inserito dall'utente
- * @param n = potenza motore ausiliario inserito dall'utente
- * @param b= scelta se selezionare solo i maggiori o solo i minori
- */
-void MainWindow::searchPotenzaMotoreAusi(unsigned int n, bool b){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Vela"){
-            if(Vela* t=dynamic_cast<Vela*>(layout->getList()->getItemByIndex(i))){
-                if(b && n<t->getPotenzaMotoreAusiliario()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }else if(!b && n>=t->getPotenzaMotoreAusiliario()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }
-        }else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-    }
-}
-
-/**
- * @brief searchTipoMotore filtra la lista delle imbarcazioni mantenendo solo quelle a motore aventi il tipo di motore uguale al parametro inserito dall'utente
- * @param n = stringa inserita dall'utente
- */
-void MainWindow::searchTipoMotore(std::string n){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-            if(Motore* t=dynamic_cast<Motore*>(layout->getList()->getItemByIndex(i))){
-                bool  test=true;
-                transform(n.begin(), n.end(), n.begin(),
-                    [](unsigned char c){ return tolower(c); });
-                if(n=="Entrobordo") test=true;
-                else if(n=="Fuoribordo") test=true;
-                else if(n=="Entrofuoribordo") test=true;
-                //eccezione ?
-                else throw new BoatException("ricerca sbagliata");
-                /*if(test!=t->getTipoMotore()){
-                        layout->getList()->erase(i);
-                        --i; --lun;
-                }
-            } else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }*/
-        }
-    }
-}
-
-/**
- * @brief searchTipoCarburante filtra la lista delle imbarcazioni mantenendo solo quelle a motore termico aventi il tipo di carburante uguale al parametro inserito dall'utente
- * @param n = stringa inserita dall'utente
- */
-void MainWindow::searchTipoCarburante(std::string n){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Termico"){
-            Termico* t=dynamic_cast<Termico*>(layout->getList()->getItemByIndex(i));
-            if(t){
-                transform(n.begin(), n.end(), n.begin(),
-                    [](unsigned char c){ return tolower(c); });
-                bool test=true;
-                if(n=="diesel") test=false;
-                else if(n=="benzina")    test=true;
-                else throw new BoatException("ricerca sbagliata");
-                /*if(test!=t->getTipoCombustione()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }*/
-        }
-        else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-        }
-    }
-}
-/**
- * @brief searchTipoBatteria filtra la lista delle imbarcazioni mantenendo solo quelle a motore elettrico aventi il tipo di batterie uguale al parametro inserito dall'utente
- * @param n = stringa inserita dall'utente
- */
-void MainWindow::searchTipoBatteria(std::string n){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Motore Elettrico"){
-            Elettrico* t=dynamic_cast<Elettrico*>(layout->getList()->getItemByIndex(i));
-            if(t){
-                transform(n.begin(), n.end(), n.begin(),
-                    [](unsigned char c){ return tolower(c); });
-                bool test=true;
-                if(n=="piombo") test=false;
-                else if(n=="litio")    test=true;
-                else throw new BoatException("ricerca sbagliata");
-                /*if(test!=t->getTipoBatteria()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }*/
-        }
-        else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-        }
-    }
-
-}
-/**
- * @brief searchMotoreAusi filtra la lista delle imbarcazioni mantenendo solo quelle a vela aventi il motore ausiliario uguale al parametro inserito dall'utente
- * @param n = stringa inserita dall'utente
- */
-void MainWindow::searchMotoreAusi(std::string n){
-    unsigned int lun=layout->getList()->count();
-    for(unsigned int i=0; i<lun; ++i){
-        if(layout->getList()->getItemByIndex(i)->tipoPropulsione()=="Vela"){
-            Vela* t=dynamic_cast<Vela*>(layout->getList()->getItemByIndex(i));
-            if(t){
-                transform(n.begin(), n.end(), n.begin(),
-                    [](unsigned char c){ return tolower(c); });
-                bool test=true;
-                if(n=="si") test=false;
-                else if(n=="no")    test=true;
-                else throw new BoatException("ricerca sbagliata");
-                if(test!=t->getMotoreAusiliario()){
-                    layout->getList()->erase(i);
-                    --i; --lun;
-                }
-            }else{
-                layout->getList()->erase(i);
-                --i; --lun;
-            }
-        }
-        else{
-            layout->getList()->erase(i);
-            --i; --lun;
-        }
-        }
-
-}
 /**
  * @brief slotConsumi mostra una finestra pop up contenente i litri necessari per l'imbarcazione selezionata nella lista  per navigare il tempo indicato nell'apposita barra dall'utente.
  * Nel caso un'imbarcazione non utilizzi i motori per navigare ma solamente per attraccare al porto come per esempio le barche a vela, sarà bloccato a 0
  */
-void MainWindow::slotConsumi() try{
+void MainWindow::slotConsumi() {
     if(layout->getList()->getItem()){
         if(layout->getList()->getItem()->getImbarcazione()->tipoPropulsione()=="Motore Termico"){
         unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloConsumi(layout->getConsumi());
@@ -818,35 +390,46 @@ void MainWindow::slotConsumi() try{
             std::string str="I KW necessari per navigare "+std::to_string(layout->getConsumi())+" ore sono: "+std::to_string(mostra)+" KW";
             QMessageBox::information(this,"Marghera Boat",QString::fromStdString(str));
         }
+        else if(layout->getList()->getItem()->getImbarcazione()->tipoPropulsione()=="Vela"){
+            try{
+                unsigned int mostra;
+                mostra=layout->getList()->getItem()->getImbarcazione()->calcoloAutonomia(layout->getAutonomia());
+            }catch(BoatException* e){
+                QMessageBox::information(this,"Marghera Boat","Questa operazione non puo' essere eseguita con le barche a vela");
+            }
+            catch(...){}
+        }
     }
 }
-catch(BoatException* e){
-    if(e->getMessage()=="Vela")   QMessageBox::information(this,"Marghera Boat","Questa operazione non puo' essere eseguita con le barche a vela");
-}
-catch(...){}
-
 /**
  * @brief slotAutonomia mostra una finestra pop up contenente il tempo di navigazione dell'imbarcazione selezionata nella lista dati i litri di carburante imbarcati indicati nell'apposita barra dall'utente.
  * Nel caso un'imbarcazione non utilizzi i motori per navigare ma solamente per attraccare al porto come per esempio le barche a vela, sarà bloccato a 0
  */
-void MainWindow::slotAutonomia() try{
+void MainWindow::slotAutonomia() {
     if(layout->getList()->getItem()){
         if(layout->getList()->getItem()->getImbarcazione()->tipoPropulsione()=="Motore Termico"){
             unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloAutonomia(layout->getAutonomia());
-            std::string str="Il tempo di autonomia della barca con "+std::to_string(layout->getConsumi())+"L di carburante imbarcato e': "+std::to_string(mostra);
+            std::string str="Il tempo di autonomia della barca con "+std::to_string(layout->getAutonomia())+"L di carburante imbarcato e': "+std::to_string(mostra);
             QMessageBox::information(this,"Nieva Trains",QString::fromStdString(str));
         }
         else if(layout->getList()->getItem()->getImbarcazione()->tipoPropulsione()=="Motore Elettrico"){
             unsigned int mostra=layout->getList()->getItem()->getImbarcazione()->calcoloAutonomia(layout->getAutonomia());
-            std::string str="Il tempo di autonomia della barca con "+std::to_string(layout->getConsumi())+"KW di carica batterie e': "+std::to_string(mostra);
+            std::string str="Il tempo di autonomia della barca con "+std::to_string(layout->getAutonomia())+"KW di carica batterie e': "+std::to_string(mostra);
             QMessageBox::information(this,"Nieva Trains",QString::fromStdString(str));
         }
+        else if(layout->getList()->getItem()->getImbarcazione()->tipoPropulsione()=="Vela"){
+            try{
+                unsigned int mostra;
+                mostra=layout->getList()->getItem()->getImbarcazione()->calcoloAutonomia(layout->getAutonomia());
+            }catch(BoatException* e){
+                QMessageBox::information(this,"Marghera Boat","Questa operazione non puo' essere eseguita con le barche a vela");
+            }
+            catch(...){}
+        }
+
     }
-   }
-   catch(BoatException* e){
-        if(e->getMessage()=="Vela")   QMessageBox::information(this,"Marghera Boat","Questa operazione non puo' essere eseguita con le barche a vela");
-   }
-   catch(...){}
+
+}
 
 
 /**

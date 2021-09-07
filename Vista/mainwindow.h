@@ -35,21 +35,9 @@ private:
     //filtri
     void searchNome(std::string);
     void searchCantiere(std::string);
-    void searchPeso(unsigned int,bool);
-    void searchVelocita(unsigned int,bool);
-    void searchLunghezza(float,bool);
-    void searchNumMotori(unsigned int,bool);
-    void searchPotenzaMotori(unsigned int, bool);
-    void searchConsumoTermico(unsigned int,bool);
-    void searchConsumoElettrico(unsigned int,bool);
-    void searchCapienzaSerbatoi(unsigned int,bool);
-    void searchCapienzaBatteria(unsigned int,bool);
-    void searchTipoMotore(std::string);
-    void searchTipoCarburante(std::string);
-    void searchTipoBatteria(std::string);
-    void searchNumVele(unsigned int,bool);
-    void searchMotoreAusi(std::string);
-    void searchPotenzaMotoreAusi(unsigned int,bool);
+    void searchPeso(unsigned int);
+    void searchVelocita(unsigned int);
+    void searchLunghezza(float);
 
 public:
     MainWindow(Model* m,QWidget *parent = nullptr);

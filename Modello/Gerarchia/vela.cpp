@@ -1,5 +1,6 @@
 #include "vela.h"
 #include <iostream>
+#include "Vista/boatexception.h"
 
 using std::string;
 using std::cerr;
@@ -61,17 +62,16 @@ std::string Vela::tipoPropulsione() const {
     return "Vela";
 }
 
-float Vela::calcoloConsumi(float tempo) const {
-    return tempo;
-    //throw new BoatException("Impossibile dare una stima dei consumi");
+float Vela::calcoloConsumi(float) const {
+    throw new BoatException("Vela");
 }
 
-float Vela::calcoloAutonomia(unsigned int carburante_imbarcato) const{
-    return carburante_imbarcato;
-    //throw new BoatException("La capienza dei serbatoi non permette l'inserimento del carburante selezionato");
+float Vela::calcoloAutonomia(unsigned int) const{
+    throw new BoatException("Vela");
 }
 
 Vela* Vela::clone() const {
     return new Vela(*this);
 }
-
+//"Impossibile dare una stima dei consumi
+//"La capienza dei serbatoi non permette l'inserimento del carburante selezionato"
